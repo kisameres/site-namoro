@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Udson ❤️ Gabrielle</title>
+
+<!-- Fonte cursiva elegante -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
 <style>
 /* ===== GRADIENTE ANIMADO ===== */
 @keyframes gradiente {
@@ -36,15 +40,33 @@ header {
   z-index: 1;
 }
 
-h1 {
-  font-size: 44px;
-  animation: pulse 2s infinite;
-  transition: transform 0.3s;
+/* ===== NOMES BONITOS ===== */
+.nomes {
+  font-family: 'Dancing Script', cursive;
+  font-size: 60px;
+  color: #ffb6c1;
+  text-shadow: 2px 2px 10px rgba(255,192,203,0.7);
+  animation: brilho 2s infinite alternate;
+  margin: 0;
 }
 
-h1:hover { transform: scale(1.1) rotate(-2deg); }
+.coracao {
+  font-size: 1.2em;
+  animation: pulse 1.5s infinite;
+}
 
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+/* Efeitos de brilho e pulso */
+@keyframes brilho {
+  0% { text-shadow: 2px 2px 10px rgba(255,192,203,0.7); }
+  50% { text-shadow: 2px 2px 20px rgba(255,182,193,0.9); }
+  100% { text-shadow: 2px 2px 10px rgba(255,192,203,0.7); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
 
 h2 { font-weight: 300; color: #ffb6c1; transition: transform 0.3s; }
 h2:hover { transform: scale(1.05); }
@@ -103,7 +125,7 @@ button {
 <body>
 
 <header>
-  <h1>Udson ❤️ Gabrielle</h1>
+  <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
   <h2>Desde 21 de julho de 2025</h2>
   <div id="contador"></div>
   <div class="relogio" id="relogio"></div>
@@ -191,5 +213,6 @@ function criarElementos() {
 }
 setInterval(criarElementos, 200);
 </script>
+
 </body>
 </html>
