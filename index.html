@@ -8,21 +8,27 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(180deg, #0b0b0b, #1a1a1a);
+  background: radial-gradient(circle at top, #2b0b16, #000);
   color: white;
   text-align: center;
   overflow: hidden;
 }
 
 header {
-  padding: 60px 20px 20px;
+  padding: 70px 20px 20px;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 h1 {
-  font-size: 42px;
-  margin-bottom: 5px;
+  font-size: 44px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 h2 {
@@ -37,15 +43,10 @@ h2 {
   line-height: 1.6;
 }
 
-button {
-  margin-top: 25px;
-  padding: 14px 30px;
-  font-size: 18px;
-  border-radius: 30px;
-  border: none;
-  background: linear-gradient(45deg, #ff4d6d, #c9184a);
-  color: white;
-  cursor: pointer;
+.relogio {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #ffc2d1;
 }
 
 section {
@@ -53,14 +54,14 @@ section {
   margin: auto;
   padding: 25px;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 .poema {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.1);
   padding: 30px;
   border-radius: 20px;
-  line-height: 1.8;
+  line-height: 1.9;
   font-size: 18px;
 }
 
@@ -68,15 +69,27 @@ footer {
   margin: 40px 0;
   font-size: 14px;
   color: #ccc;
+  position: relative;
+  z-index: 3;
 }
 
-/* ANIMAÇÃO */
-.petala {
+/* ELEMENTOS CAINDO */
+.petala, .brilho {
   position: fixed;
   top: -20px;
-  font-size: 22px;
   animation: cair linear infinite;
   z-index: 1;
+}
+
+.petala {
+  font-size: 24px;
+}
+
+.brilho {
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
 }
 
 @keyframes cair {
@@ -85,7 +98,7 @@ footer {
     opacity: 1;
   }
   100% {
-    transform: translateY(110vh) rotate(360deg);
+    transform: translateY(120vh) rotate(360deg);
     opacity: 0;
   }
 }
@@ -98,19 +111,25 @@ footer {
   <h1>Udson ❤️ Gabrielle</h1>
   <h2>Desde 5 de agosto de 2024</h2>
   <div id="contador"></div>
-  <button onclick="document.getElementById('musica').play()">▶ Tocar música</button>
+  <div class="relogio" id="relogio"></div>
+  <p style="margin-top:15px; font-size:14px; color:#aaa;">
+    👉 Clique em qualquer lugar para tocar a música 🎵
+  </p>
 </header>
 
 <section>
   <div class="poema">
     <p>
-      Nosso amor não é feito só de datas,<br>
-      mas de todos os segundos que escolhemos ficar.<br><br>
+      Nosso amor não se mede apenas em dias,<br>
+      mas em cada segundo que escolhemos ficar.<br><br>
 
-      Desde aquele dia,<br>
-      cada hora teve significado,<br>
-      cada minuto virou memória,<br>
-      cada segundo valeu a pena.<br><br>
+      Cada hora virou história,<br>
+      cada minuto virou lembrança,<br>
+      cada segundo virou amor.<br><br>
+
+      Não importa o tempo que passe,<br>
+      enquanto for você,<br>
+      sempre será casa.<br><br>
 
       <strong>E ainda estamos juntos ❤️</strong>
     </p>
@@ -122,22 +141,31 @@ footer {
 </footer>
 
 <audio id="musica" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/02/23/audio_1b1c1f8d7c.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_9c4c7b7d6e.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const inicio = new Date("2024-08-05T00:00:00");
+const musica = document.getElementById("musica");
+let tocando = false;
 
+// TOCAR MUSICA AO CLICAR
+document.body.addEventListener("click", () => {
+  if (!tocando) {
+    musica.play();
+    tocando = true;
+  }
+});
+
+// CONTADOR
 function atualizarContador() {
   const agora = new Date();
   let diff = Math.floor((agora - inicio) / 1000);
 
   const segundos = diff % 60;
   diff = Math.floor(diff / 60);
-
   const minutos = diff % 60;
   diff = Math.floor(diff / 60);
-
   const horas = diff % 24;
   const diasTotais = Math.floor(diff / 24);
 
@@ -146,33 +174,36 @@ function atualizarContador() {
   const dias = (diasTotais % 365) % 30;
 
   document.getElementById("contador").innerHTML =
-    `⏳ <strong>${anos}</strong> anos,
-     <strong>${meses}</strong> meses,
-     <strong>${dias}</strong> dias<br>
-     ⏰ <strong>${horas}</strong> horas,
-     <strong>${minutos}</strong> minutos,
-     <strong>${segundos}</strong> segundos juntos 💞`;
+    `⏳ ${anos} anos, ${meses} meses, ${dias} dias<br>
+     ⏰ ${horas}h ${minutos}m ${segundos}s juntos 💞`;
 }
 
 setInterval(atualizarContador, 1000);
 atualizarContador();
 
-function criarPetala() {
-  const petala = document.createElement("div");
-  petala.className = "petala";
-  petala.innerText = Math.random() > 0.5 ? "🌹" : "❤️";
-  petala.style.left = Math.random() * 100 + "vw";
-  petala.style.animationDuration = (Math.random() * 3 + 4) + "s";
-  petala.style.fontSize = (Math.random() * 12 + 18) + "px";
+// RELÓGIO
+setInterval(() => {
+  const agora = new Date();
+  document.getElementById("relogio").innerText =
+    `Agora: ${agora.toLocaleTimeString()}`;
+}, 1000);
 
-  document.body.appendChild(petala);
+// ELEMENTOS CAINDO
+function criarElementos() {
+  const el = document.createElement("div");
+  el.className = Math.random() > 0.7 ? "brilho" : "petala";
+  el.innerText = el.className === "petala"
+    ? (Math.random() > 0.5 ? "🌹" : "❤️")
+    : "";
 
-  setTimeout(() => {
-    petala.remove();
-  }, 8000);
+  el.style.left = Math.random() * 100 + "vw";
+  el.style.animationDuration = (Math.random() * 4 + 3) + "s";
+
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 9000);
 }
 
-setInterval(criarPetala, 300);
+setInterval(criarElementos, 200);
 </script>
 
 </body>
