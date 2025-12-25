@@ -109,64 +109,64 @@ footer {
 <section>
   <div class="poema">
     <p>
- Nosso amor não nascente do acaso,<br>
- nascente da escola.<br><br>
+      Nosso amor não nasceu do acaso,<br>
+      nasceu da escolha.<br><br>
 
- Desde o primeiro dia, segundos juntos,<br>
- aprendiz, errando, crescendo,<br>
- mas sempre escolhendo ficar.<br><br>
+      Desde o primeiro dia, seguimos juntos,<br>
+      aprendendo, errando, crescendo,<br>
+      mas sempre escolhendo ficar.<br><br>
 
- Não importa o tempo que passou,<br>
- nem os dias difíceis,<br>
- enquanto para você,<br>
- sempre vai valer a pena.<br><br>
+      Não importa o tempo que passe,<br>
+      nem os dias difíceis,<br>
+      enquanto for você,<br>
+      sempre vai valer a pena.<br><br>
 
-      <forte>E ainda estamos juntos ❤️</forte>
+      <strong>E ainda estamos juntos ❤️</strong>
     </p>
-  </dividir>
-</sessão>
+  </div>
+</section>
 
-<rodapé>
- Feito com amor para nossa história 💖
-</rodapé>
+<footer>
+  Feito com amor para nossa história 💖
+</footer>
 
-<áudio id="música" laço>
-  <fonte fonte="https://cdn.pixabay.com/audio/2022/02/23/audio_1b1c1f8d7c.mp3" tipo="áudio/mpeg">
-</áudio>
+<audio id="musica" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/02/23/audio_1b1c1f8d7c.mp3" type="audio/mpeg">
+</audio>
 
-<roteiro>
+<script>
 // CONTADOR
-const iniciativa = novo Data("2024-08-05T00:00:00");
+const inicio = new Date("2024-08-05T00:00:00");
 
-função atualizar() {
- const ágora = novo Data();
- const diferença = ágora - iniciativa;
+function atualizar() {
+  const agora = new Date();
+  const diff = agora - inicio;
 
- const dias = Matemática.chão(diferença / (1000 * 60 * 60 * 24));
- documento.obterElementoPorId("contador").HTML interno =
- `Juntos há <forte>${dias}</forte> dias 💞`;
+  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+  document.getElementById("contador").innerHTML =
+    `Juntos há <strong>${dias}</strong> dias 💞`;
 }
-definirIntervalo(atualizar, 1000);
+setInterval(atualizar, 1000);
 atualizar();
 
 // ROSAS / CORAÇÕES
-função chorarPétala() {
- const pétala = documento.criarElemento("div");
- pétala.nome da classe = "pétala";
- pétala.texto interno = Matemática.aleatório() > 0,5 ? "🌹": "❤️";
- pétala.estilo.esquerda = Matemática.aleatório() * 100 + "vw";
- pétala.estilo.animaçãoDuração = (Matemática.aleatório() * 3 + 4) + "s";
- pétala.estilo.tamanho da fonte = (Matemática.aleatório() * 15 + 15) + "px";
+function criarPetala() {
+  const petala = document.createElement("div");
+  petala.className = "petala";
+  petala.innerText = Math.random() > 0.5 ? "🌹" : "❤️";
+  petala.style.left = Math.random() * 100 + "vw";
+  petala.style.animationDuration = (Math.random() * 3 + 4) + "s";
+  petala.style.fontSize = (Math.random() * 15 + 15) + "px";
 
- documento.corpo.anexarCriança(pétala);
+  document.body.appendChild(petala);
 
- definirTempo limite(() => {
- pétala.remover();
- }, 8000);
+  setTimeout(() => {
+    petala.remove();
+  }, 8000);
 }
 
-definirIntervalo(chorarPétala, 300);
-</roteiro>
+setInterval(criarPetala, 300);
+</script>
 
-</corpo>
-</HTML>
+</body>
+</html>
