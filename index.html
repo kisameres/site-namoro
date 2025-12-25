@@ -3,111 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <title>Udson ❤️ Gabrielle</title>
+</head>
 
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(#0b0b0b, #1c1c1c);
-  color: white;
-  text-align: center;
-  overflow: hidden;
-}
+<body style="font-family:Arial; background:#111; color:white; text-align:center; padding:50px;">
 
-header {
-  enchimento: 60px 20px 30px;
-}
+<h1>Udson ❤️ Gabrielle</h1>
+<p>Desde 5 de agosto de 2024</p>
 
-h1 {
-  tamanho sim fonte: 42px;
-}
+<p id="contador"></p>
 
-h2 {
-  peso sim fonte: 300;
-  cor: #ffb6c1;
-}
+<script>
+const inicio = new Date("2024-08-05T00:00:00");
+setInterval(() => {
+  const agora = new Date();
+  const dias = Math.floor((agora - inicio) / (1000 * 60 * 60 * 24));
+  document.getElementById("contador").innerText =
+    `Estamos juntos há ${dias} dias ❤️`;
+}, 1000);
+</script>
 
-.contador {
-  Margem superior: 10px;
-  tamanho sim fonte: 18px;
-}
-
-sessão {
-  largura máxima: 800px;
-  Margem: auto;
-  enchimento: 20px;
-}
-
-.poema {
-  fundo: RGBA(255,255,255,0,08);
-  enchimento: 30px;
-  Margem superior: 40px;
-  raio de borda: 20px;
-  alta sim linha: 1,7;
-  tamanho sim fonte: 18px;
-}
-
-botão {
-  Margem superior: 25px;
-  enchimento: 14px 28px;
-  tamanho sim fonte: 18px;
-  raio de borda: 30px;
-  fronteira: nenhum;
-  fundo: gradiente linear(45graus, #ff4d6d, #c9184a);
-  cor: branco;
-  cursor: ponteiro;
-}
-
-rodapé {
-  Margem: 40px 0;
-  tamanho sim fonte: 14px;
-  cor: #ccc;
-}
-</estilo>
-</caboça>
-
-<corpo>
-
-<caboçalho>
-  <h1>Udson ❤️ Gabrielle</h1>
-  <h2>Desde 5 de agosto de 2024</h2>
-  <dividir classe="contador" id="contador"></dividir>
-  <botão clicar em="documento.obterElementoPorId('música').jogar()">▶ Tocar música</botão>
-</caboçalho>
-
-<sessão>
-  <dividir classe="poema">
-    <p>
- Nosso amor não preciso de promessas exageradas. .<br>
- Ele viver não detalhes, não dias simples,<br>
- não jeito que escolhemos Ficar. .<br><br>
-
- Desde 5 de agosto de 2024,<br>
- segundos juntos — e ainda estamos aqui,<br>
- escolhendo hum ao outro todos os dias.
- </p>
- </dividir>
-</sessão>
-
-<áudio id="música" laço>
-  <fonte fonte="https://cdn.pixabay.com/audio/2022/03/15/audio_5b6e8a2b45.mp3" tipo="áudio/mpeg">
-</áudio>
-
-<roteiro>
-const iniciativa = novo Dados("2024-08-05T00:00:00");
-
-diversão atualizarContador() {
-  const ágora = novo Dados();
-  const diferença = ágora - iniciativa;
-
-  const dias = Matemática. .chão(diferença / (1000*60*60*24));
-  documento. .obterElementoPorId("contador").HTML interno =
-    `Juntos há <forte>${dias}</forte> dias ❤️`;
-}
-
-definirIntervalo(atualizarContador, 1000);
-atualizarContador();
-</roteiro>
-
-</corpo>
-</HTML>
+</body>
+</html>
