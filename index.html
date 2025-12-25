@@ -3,35 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <title>Udson ❤️ Gabrielle</title>
-
 <style>
-/* ===== BACKGROUND DE VIDEO ===== */
-#videoFundo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
+/* ===== GRADIENTE ANIMADO ===== */
+@keyframes gradiente {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* ===== CORPO E TEMAS ===== */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   color: white;
   text-align: center;
   overflow: hidden;
-  transition: background 0.5s, color 0.5s;
-  background: transparent;
+  background: linear-gradient(270deg, #2b0b16, #000, #3b0c20, #1a0010);
+  background-size: 800% 800%;
+  animation: gradiente 20s ease infinite;
+  transition: color 0.5s;
 }
 
 body.day {
+  background: linear-gradient(270deg, #ffe6f0, #ffd9e6, #ffe0f0, #ffd0e0);
+  background-size: 800% 800%;
+  animation: gradiente 20s ease infinite;
   color: #333;
 }
 
-/* ===== HEADER ===== */
 header {
   padding: 70px 20px 20px;
   position: relative;
@@ -41,40 +39,33 @@ header {
 h1 {
   font-size: 44px;
   animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  transition: transform 0.3s;
 }
 
-h2 { font-weight: 300; color: #ffb6c1; }
+h1:hover { transform: scale(1.1) rotate(-2deg); }
 
-#contador {
-  margin-top: 15px;
-  font-size: 18px;
-  color: #ffd1dc;
-  line-height: 1.6;
-}
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-.relogio {
-  margin-top: 8px;
-  font-size: 16px;
-  color: #ffc2d1;
-}
+h2 { font-weight: 300; color: #ffb6c1; transition: transform 0.3s; }
+h2:hover { transform: scale(1.05); }
 
-/* ===== POEMA ===== */
+#contador { margin-top: 15px; font-size: 18px; color: #ffd1dc; line-height: 1.6; }
+.relogio { margin-top: 8px; font-size: 16px; color: #ffc2d1; }
+
 .poema {
-  background: rgba(0,0,0,0.4);
+  background: rgba(255,255,255,0.1);
   padding: 30px;
   border-radius: 20px;
   line-height: 1.9;
   font-size: 18px;
   max-width: 900px;
   margin: 25px auto;
+  transition: box-shadow 0.3s, transform 0.3s;
 }
+.poema:hover { box-shadow: 0 0 30px rgba(255,192,203,0.6); transform: translateY(-5px); }
 
-/* ===== BOTÕES ===== */
+footer { margin: 40px 0; font-size: 14px; color: #ccc; position: relative; z-index: 1; }
+
 button {
   margin: 10px 5px;
   padding: 8px 16px;
@@ -84,33 +75,32 @@ button {
   cursor: pointer;
   z-index: 1;
 }
+
 #botaoMusica { background-color: #ff99c8; color: #000; }
 #botaoMusica:hover { background-color: #ffb6d9; }
+
 #botaoTema { background-color: #99ccff; color: #000; }
 #botaoTema:hover { background-color: #aaddff; }
 
-/* ===== ELEMENTOS CAINDO ===== */
-.petala, .brilho {
+/* ===== ELEMENTOS ANIMADOS ===== */
+.petala, .brilho, .pequenoBrilho {
   position: fixed;
   top: -20px;
   animation: cair linear infinite;
   z-index: 0;
 }
+
 .petala { font-size: 24px; }
 .brilho { width: 6px; height: 6px; background: rgba(255,255,255,0.8); border-radius: 50%; }
+.pequenoBrilho { width: 3px; height: 3px; background: rgba(255,255,255,0.6); border-radius: 50%; }
+
 @keyframes cair {
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
   100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
-
 <body>
-
-<!-- VÍDEO ANIMADO DE FUNDO -->
-<video autoplay muted loop id="videoFundo">
-  <source src="fundo_animado.mp4" type="video/mp4">
-</video>
 
 <header>
   <h1>Udson ❤️ Gabrielle</h1>
@@ -119,8 +109,8 @@ button {
   <div class="relogio" id="relogio"></div>
   <button id="botaoMusica">▶️ Tocar / Pausar Música</button>
   <button id="botaoTema">🌞 Trocar Tema</button>
-  <p style="margin-top:15px; font-size:14px; color:#ddd;">
-    👉 Clique na tela para efeitos de pétalas e corações 🎵
+  <p style="margin-top:15px; font-size:14px; color:#aaa;">
+    👉 Clique na tela para ver pétalas e corações 🎵
   </p>
 </header>
 
@@ -154,14 +144,12 @@ const botaoTema = document.getElementById("botaoTema");
 
 // Play/pause música
 botaoMusica.addEventListener("click", () => {
-  if (musica.paused) musica.play();
+  if(musica.paused) musica.play();
   else musica.pause();
 });
 
 // Trocar tema
-botaoTema.addEventListener("click", () => {
-  document.body.classList.toggle("day");
-});
+botaoTema.addEventListener("click", () => { document.body.classList.toggle("day"); });
 
 // CONTADOR
 function atualizarContador() {
@@ -191,9 +179,11 @@ setInterval(() => {
 
 // ELEMENTOS CAINDO
 function criarElementos() {
+  const tipo = Math.random();
   const el = document.createElement("div");
-  el.className = Math.random()>0.7 ? "brilho" : "petala";
-  el.innerText = el.className==="petala"?(Math.random()>0.5?"🌹":"❤️"):"";
+  if(tipo>0.8) { el.className="brilho"; }
+  else if(tipo>0.4) { el.className="petala"; el.innerText = Math.random()>0.5?"🌹":"❤️"; }
+  else { el.className="pequenoBrilho"; }
   el.style.left = Math.random()*100+"vw";
   el.style.animationDuration = (Math.random()*4+3)+"s";
   document.body.appendChild(el);
@@ -201,6 +191,5 @@ function criarElementos() {
 }
 setInterval(criarElementos, 200);
 </script>
-
 </body>
 </html>
