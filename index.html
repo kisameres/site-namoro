@@ -18,10 +18,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: white;
   text-align: center;
-  overflow-x: hidden;
   background: linear-gradient(270deg, #2b0b16, #000, #3b0c20, #1a0010);
   background-size: 800% 800%;
   animation: gradiente 20s ease infinite;
+  overflow-x: hidden;
 }
 
 header {
@@ -51,6 +51,21 @@ header {
   color: #ffd1dc;
 }
 
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  background: #ffb6c1;
+  color: #000;
+}
+
+button:hover {
+  background: #ffd1dc;
+}
+
 .galeria {
   display: flex;
   justify-content: center;
@@ -63,18 +78,11 @@ header {
   width: 260px;
   border-radius: 20px;
   box-shadow: 0 0 25px rgba(255,182,193,0.6);
-  transition: transform 0.4s, box-shadow 0.4s;
+  transition: transform 0.4s;
 }
 
 .foto:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255,182,193,0.9);
-}
-
-.nome-foto {
-  margin-top: 10px;
-  font-size: 16px;
-  color: #ffb6c1;
 }
 
 .poema {
@@ -85,12 +93,6 @@ header {
   margin: 30px auto;
   line-height: 1.9;
   font-size: 18px;
-}
-
-footer {
-  margin: 40px 0;
-  font-size: 14px;
-  color: #ccc;
 }
 
 .petala {
@@ -107,48 +109,47 @@ footer {
 </style>
 </head>
 
-<body>
+<body onclick="iniciarMusica()">
 
 <header>
   <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
   <h2>Desde 21 de julho de 2025</h2>
   <div id="contador"></div>
+
+  <button onclick="toggleMusica()">🎵 Tocar / Pausar Música</button>
 </header>
 
 <section class="galeria">
-  <div>
-    <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
-    <div class="nome-foto">Gabrielle 💖</div>
-  </div>
-
-  <div>
-    <img class="foto" src="img/foto-udson.jpg" alt="Udson">
-    <div class="nome-foto">Udson 💙</div>
-  </div>
+  <img class="foto" src="img/foto-gabrielle.jpg.jpg" alt="Gabrielle">
+  <img class="foto" src="img/foto-udson.jpg.jpg" alt="Udson">
 </section>
 
 <section>
   <div class="poema">
     Nosso amor não se mede em dias,<br>
-    mas em cada escolha de ficar.<br><br>
+    mas em cada segundo escolhido juntos.<br><br>
 
     Cada riso virou memória,<br>
     cada abraço virou lar,<br>
     cada olhar virou certeza.<br><br>
 
-    Se o tempo passar,<br>
-    que passe ao seu lado.<br><br>
-
     <strong>Sempre nós dois ❤️</strong>
   </div>
 </section>
 
-<footer>
-  Feito com amor para nossa história 💕
+<footer style="margin:40px;color:#ccc;">
+  Feito com amor 💕
 </footer>
+
+<!-- MÚSICA -->
+<audio id="musica" loop>
+  <source src="audio/amor.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 const inicio = new Date("2025-07-21T00:00:00");
+const musica = document.getElementById("musica");
+let musicaIniciada = false;
 
 function atualizarContador() {
   const agora = new Date();
@@ -163,9 +164,21 @@ function atualizarContador() {
   document.getElementById("contador").innerHTML =
     `⏳ ${d} dias, ${h}h ${m}m ${s}s juntos 💞`;
 }
-
 setInterval(atualizarContador, 1000);
 atualizarContador();
+
+function toggleMusica() {
+  if (musica.paused) musica.play();
+  else musica.pause();
+}
+
+function iniciarMusica() {
+  if (!musicaIniciada) {
+    musica.volume = 0.4;
+    musica.play();
+    musicaIniciada = true;
+  }
+}
 
 function criarPetala() {
   const p = document.createElement("div");
@@ -176,7 +189,6 @@ function criarPetala() {
   document.body.appendChild(p);
   setTimeout(()=>p.remove(),8000);
 }
-
 setInterval(criarPetala, 300);
 </script>
 
