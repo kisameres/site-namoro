@@ -37,6 +37,12 @@ body.dark .poema { background: rgba(255,255,255,0.03); }
 body.dark footer { color: #999; }
 body.dark button { background: #b98b95; }
 
+/* ✨ DESTAQUE DOS PETS NO MODO ESCURO */
+body.dark .gato,
+body.dark .cachorro {
+  box-shadow: 0 0 25px rgba(255,182,193,0.35);
+}
+
 /* HEADER */
 header {
   padding: 50px 20px 20px;
@@ -150,6 +156,20 @@ header {
   opacity: 1;
 }
 
+/* 🐾 PATINHAS CAINDO */
+.patinha {
+  position: fixed;
+  top: -20px;
+  font-size: 16px;
+  animation: cair linear infinite;
+  pointer-events: none;
+}
+
+@keyframes cair {
+  0% { transform: translateY(0) rotate(0deg); opacity: .6; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
+
 /* POEMA */
 .poema {
   background: rgba(255,255,255,0.05);
@@ -221,7 +241,7 @@ button {
   <div class="foto-container">
     <img class="foto gato" src="img/gato-gabrielle.jpg">
     <div class="nome-foto">Gatinho dela 🐱</div>
-    <div class="tooltip">O xodó da mamãe 💕</div>
+    <div class="tooltip">O xodó da casa 💕</div>
   </div>
 
   <div class="foto-container">
@@ -270,6 +290,18 @@ function toggleDark() {
 if (localStorage.getItem("modo-escuro")==="true") {
   document.body.classList.add("dark");
 }
+
+/* 🐾 CRIAR PATINHAS */
+function criarPatinha() {
+  const p = document.createElement("div");
+  p.className = "patinha";
+  p.innerText = "🐾";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (6 + Math.random() * 4) + "s";
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 10000);
+}
+setInterval(criarPatinha, 1200);
 </script>
 
 </body>
