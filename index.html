@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
 <style>
-/* GRADIENTE ESCURO */
 @keyframes gradiente {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -23,7 +22,32 @@ body {
   background-size: 800% 800%;
   animation: gradiente 40s ease infinite;
   overflow-x: hidden;
-  position: relative;
+}
+
+/* MODO ESCURO PROFUNDO */
+body.dark {
+  background: linear-gradient(270deg, #050008, #0b0012, #050008);
+  background-size: 600% 600%;
+  animation: gradiente 60s ease infinite;
+  color: #d6b2b8;
+}
+
+body.dark .nomes {
+  color: #c79aa6;
+  text-shadow: 0 0 6px rgba(255,182,193,0.2);
+}
+
+body.dark .poema {
+  background: rgba(255,255,255,0.03);
+}
+
+body.dark footer {
+  color: #999;
+}
+
+body.dark button {
+  background: #b98b95;
+  color: #000;
 }
 
 /* HEADER */
@@ -55,23 +79,13 @@ header {
   to { opacity: 1; transform: translateY(0); }
 }
 
-#contador {
-  margin-top: 15px;
-  font-size: 20px;
-  color: #f0c0c0;
+#contador, #hora-brasil {
   opacity: 0;
   animation: slideFade 1.5s forwards;
-  animation-delay: 0.5s;
 }
 
-#hora-brasil {
-  font-size: 16px;
-  color: #f0c0c0;
-  margin-top: 5px;
-  opacity: 0;
-  animation: slideFade 1.5s forwards;
-  animation-delay: 0.8s;
-}
+#contador { animation-delay: .5s; }
+#hora-brasil { animation-delay: .8s; }
 
 /* GALERIA */
 .galeria {
@@ -92,17 +106,13 @@ header {
   box-shadow: 0 0 15px rgba(255,182,193,0.2);
   transition: transform 0.5s, box-shadow 0.5s;
   opacity: 0;
+  transform: translateY(20px);
   animation: fadeSlide 1s forwards;
 }
 
 .foto:hover {
   transform: scale(1.05);
   box-shadow: 0 0 25px rgba(255,182,193,0.3);
-}
-
-.foto:hover + .tooltip {
-  opacity: 1;
-  transform: translateY(-10px);
 }
 
 @keyframes fadeSlide {
@@ -113,22 +123,6 @@ header {
   margin-top: 10px;
   font-size: 16px;
   color: #d9a6b0;
-}
-
-.tooltip {
-  position: absolute;
-  bottom: 110%;
-  left: 50%;
-  transform: translateX(-50%) translateY(0);
-  background: rgba(255,182,193,0.2);
-  color: #000;
-  padding: 5px 10px;
-  border-radius: 10px;
-  font-size: 14px;
-  opacity: 0;
-  transition: opacity 0.3s, transform 0.3s;
-  pointer-events: none;
-  white-space: nowrap;
 }
 
 /* POEMA */
@@ -154,7 +148,18 @@ footer {
   color: #ccc;
 }
 
-/* PÉTALAS / CORAÇÕES */
+/* BOTÕES */
+button {
+  margin: 10px 5px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  background: #d9a6b0;
+}
+
+/* PÉTALAS */
 .petala {
   position: fixed;
   top: -20px;
@@ -164,57 +169,14 @@ footer {
 }
 
 @keyframes cair {
-  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.5; }
-  50% { transform: translateY(60vh) translateX(15px) rotate(180deg); }
-  100% { transform: translateY(120vh) translateX(-10px) rotate(360deg); opacity: 0; }
+  0% { transform: translateY(0) rotate(0deg); opacity: .5; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
 }
 
-.background-coracoes {
-  position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: -1;
-}
-
-.background-coracoes div {
-  position: absolute;
-  color: rgba(255,182,193,0.2);
-  font-size: 12px;
-  animation: floatUp linear infinite;
-}
-
-@keyframes floatUp {
-  0% { transform: translateY(100vh) scale(1); opacity: 0; }
-  50% { opacity: 0.5; }
-  100% { transform: translateY(-10vh) scale(1.3); opacity: 0; }
-}
-
-/* BOTÃO */
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  font-size: 15px;
-  cursor: pointer;
-  background: #d9a6b0;
-  color: #000;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background: #e0b0b0;
-}
-
-/* RESPONSIVO */
+/* MOBILE */
 @media (max-width: 600px) {
   .foto { width: 80%; max-width: 250px; }
   .nomes { font-size: 40px; }
-  .poema { padding: 20px; font-size: 16px; }
 }
 </style>
 </head>
@@ -226,156 +188,81 @@ button:hover {
   <h2>Desde 21 de julho de 2025</h2>
   <div id="contador"></div>
   <div id="hora-brasil"></div>
+
   <button onclick="toggleMusica()">🎵 Tocar / Pausar Música</button>
+  <button onclick="toggleDark()">🌙 Modo Escuro Profundo</button>
 </header>
 
 <section class="galeria">
   <div class="foto-container">
-    <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
+    <img class="foto" src="img/foto-gabrielle.jpg">
     <div class="nome-foto">Gabrielle 💖</div>
-    <div class="tooltip">Minha namorada linda 💕</div>
   </div>
   <div class="foto-container">
-    <img class="foto" src="img/foto-udson.jpg" alt="Udson">
+    <img class="foto" src="img/foto-udson.jpg">
     <div class="nome-foto">Udson 💙</div>
-    <div class="tooltip">Eu, apaixonado 😍</div>
-  </div>
-  <div class="foto-container">
-    <img class="foto" src="img/gato-gabrielle.jpg" alt="Gato da Gabrielle">
-    <div class="nome-foto">Gatinho dela 🐱</div>
-    <div class="tooltip">O fofo dela 🐾</div>
-  </div>
-  <div class="foto-container">
-    <img class="foto" src="img/cachorro-udson.jpg" alt="Cachorro do Udson">
-    <div class="nome-foto">Cachorrinho meu 🐶</div>
-    <div class="tooltip">Meu amigo peludo 🐾</div>
   </div>
 </section>
 
-<section>
-  <div class="poema">
-    Nosso amor não se mede em dias,<br>
-    mas em cada segundo escolhido juntos.<br><br>
+<div class="poema">
+Nosso amor não se mede em dias,<br>
+mas em cada segundo escolhido juntos.<br><br>
+<strong>Sempre nós dois ❤️</strong>
+</div>
 
-    Cada riso virou memória,<br>
-    cada abraço virou lar,<br>
-    cada olhar virou certeza.<br><br>
+<footer>Feito com amor 💕</footer>
 
-    <strong>Sempre nós dois ❤️</strong>
-  </div>
-</section>
-
-<footer>
-  Feito com amor 💕
-</footer>
-
-<div class="background-coracoes" id="background-coracoes"></div>
-
+<!-- MP3 NÃO ALTERADO -->
 <audio id="musica" loop autoplay>
   <source src="audio/amor.mp3.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// CONTADOR E HORA
 const inicio = new Date("2025-07-21T00:00:00");
 const musica = document.getElementById("musica");
 
-function atualizarContador() {
+// CONTADOR
+function atualizar() {
   const agora = new Date();
   let diff = Math.floor((agora - inicio)/1000);
-  const s = diff % 60;
-  diff = Math.floor(diff/60);
-  const m = diff % 60;
-  diff = Math.floor(diff/60);
+  const s = diff % 60; diff = Math.floor(diff/60);
+  const m = diff % 60; diff = Math.floor(diff/60);
   const h = diff % 24;
   const d = Math.floor(diff/24);
 
-  document.getElementById("contador").innerHTML =
-    `⏳ <strong>${d}</strong> dias 🌸 <strong>${h}</strong>h 💕 <strong>${m}</strong>m 🐾 <strong>${s}</strong>s juntos`;
+  contador.innerHTML = `⏳ ${d} dias ${h}h ${m}m ${s}s juntos`;
 }
+setInterval(atualizar, 1000);
 
-function atualizarHoraBrasil() {
-  const agora = new Date();
-  const opcoes = { timeZone: 'America/Sao_Paulo', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-  const horaBR = agora.toLocaleTimeString('pt-BR', opcoes);
-  document.getElementById("hora-brasil").innerHTML = `🕒 Hora de Brasília: ${horaBR}`;
-}
-
-setInterval(() => { atualizarContador(); atualizarHoraBrasil(); }, 1000);
-
-// TOGGLE MÚSICA
+// MÚSICA
 function toggleMusica() {
-  if (musica.paused) musica.play();
-  else musica.pause();
+  musica.paused ? musica.play() : musica.pause();
+}
+
+// MODO ESCURO PROFUNDO
+function toggleDark() {
+  document.body.classList.toggle("dark");
+  localStorage.setItem(
+    "modo-escuro",
+    document.body.classList.contains("dark")
+  );
+}
+
+if (localStorage.getItem("modo-escuro") === "true") {
+  document.body.classList.add("dark");
 }
 
 // PÉTALAS
-let temaEmoji = '❤️';
 function criarPetala() {
   const p = document.createElement("div");
   p.className = "petala";
-  p.innerText = temaEmoji;
-  p.style.left = Math.random()*100 + "vw";
-  p.style.animationDuration = (6 + Math.random()*4) + "s";
+  p.innerText = "❤️";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (8 + Math.random() * 4) + "s";
   document.body.appendChild(p);
-  setTimeout(()=>p.remove(),10000);
+  setTimeout(() => p.remove(), 12000);
 }
-setInterval(criarPetala, 600);
-
-// FUNDO CORAÇÕES
-const fundo = document.getElementById('background-coracoes');
-for(let i=0;i<30;i++){
-  const c = document.createElement('div');
-  c.innerText = '💖';
-  c.style.left = Math.random()*100 + 'vw';
-  c.style.fontSize = (10 + Math.random()*15) + 'px';
-  c.style.animationDuration = (10 + Math.random()*10) + 's';
-  c.style.animationDelay = Math.random()*5 + 's';
-  fundo.appendChild(c);
-}
-
-// TEMAS SAZONAIS ESCUROS
-function temaDoDia() {
-  const hoje = new Date();
-  const mes = hoje.getMonth() + 1;
-  const dia = hoje.getDate();
-
-  let novaMusica = "audio/amor.mp3.mp3"; // default
-
-  if (mes === 12 && dia >= 20) { // Natal
-    document.body.style.background = 'linear-gradient(270deg, #2a0b0b, #4b1c1c, #5c2b2b, #2a0b0b)';
-    temaEmoji = '🎄';
-  } 
-  else if ((mes === 12 && dia === 31) || (mes === 1 && dia === 1)) { // Ano Novo
-    document.body.style.background = 'linear-gradient(270deg, #0f0f1a, #2a2a44, #5a5a7f)';
-    temaEmoji = '🎆';
-  } 
-  else if (mes === 4 && dia >= 1 && dia <= 20) { // Páscoa
-    document.body.style.background = 'linear-gradient(270deg, #3a1a2a, #4b2b3c, #5c3c4f)';
-    temaEmoji = '🐣';
-  } 
-  else if (mes === 6 && dia === 12) { // Dia dos Namorados
-    document.body.style.background = 'linear-gradient(270deg, #2b001b, #4b1f2b, #5c2b3c)';
-    temaEmoji = '💘';
-  }
-  else if (mes === 10 && dia === 31) { // Halloween
-    document.body.style.background = 'linear-gradient(270deg, #1a0f0f, #4b1c0f, #5c2b1c)';
-    temaEmoji = '🎃';
-  }
-  else if ((mes === 9 || mes === 10)) { // Primavera
-    document.body.style.background = 'linear-gradient(270deg, #2a1a2a, #4b2b4b, #5c3c5c)';
-    temaEmoji = '🌸';
-  }
-  else { // Normal
-    document.body.style.background = 'linear-gradient(270deg, #1a0010, #2b001b, #1f0014, #2b001b)';
-    temaEmoji = '❤️';
-  }
-}
-
-// Inicializa tema e atualiza a cada hora
-temaDoDia();
-setInterval(temaDoDia, 3600000);
-
+setInterval(criarPetala, 900);
 </script>
 
 </body>
