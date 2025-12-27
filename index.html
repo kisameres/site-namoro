@@ -22,6 +22,7 @@ body {
   background-size: 800% 800%;
   animation: gradiente 20s ease infinite;
   overflow-x: hidden;
+  position: relative;
 }
 
 header {
@@ -33,6 +34,9 @@ header {
   font-size: 60px;
   color: #ffb6c1;
   text-shadow: 2px 2px 15px rgba(255,192,203,0.8);
+  opacity: 0;
+  transform: translateY(-30px);
+  animation: slideFade 1s forwards;
 }
 
 .coracao {
@@ -45,16 +49,26 @@ header {
   100% { transform: scale(1); }
 }
 
+@keyframes slideFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
 #contador {
   margin-top: 15px;
   font-size: 20px;
   color: #ffd1dc;
+  opacity: 0;
+  animation: slideFade 1.5s forwards;
+  animation-delay: 0.5s;
 }
 
 #hora-brasil {
   font-size: 16px;
   color: #ffd1dc;
   margin-top: 5px;
+  opacity: 0;
+  animation: slideFade 1.5s forwards;
+  animation-delay: 0.8s;
 }
 
 .galeria {
@@ -65,17 +79,17 @@ header {
   margin: 40px auto;
 }
 
+.foto-container {
+  position: relative;
+}
+
 .foto {
   width: 260px;
   border-radius: 20px;
   box-shadow: 0 0 25px rgba(255,182,193,0.6);
-  transition: transform 0.4s, box-shadow 0.4s, opacity 0.6s;
+  transition: transform 0.4s, box-shadow 0.4s;
   opacity: 0;
-  animation: fadeIn 1s forwards;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
+  animation: fadeSlide 1s forwards;
 }
 
 .foto:hover {
@@ -83,10 +97,35 @@ header {
   box-shadow: 0 0 40px rgba(255,182,193,0.9);
 }
 
+.foto:hover + .tooltip {
+  opacity: 1;
+  transform: translateY(-10px);
+}
+
+@keyframes fadeSlide {
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .nome-foto {
   margin-top: 10px;
   font-size: 16px;
   color: #ffb6c1;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: rgba(255,182,193,0.9);
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .poema {
@@ -99,7 +138,9 @@ header {
   font-size: 18px;
   font-family: 'Dancing Script', cursive;
   opacity: 0;
-  animation: fadeIn 1.5s forwards;
+  transform: translateY(30px);
+  animation: slideFade 1s forwards;
+  animation-delay: 1s;
 }
 
 footer {
@@ -120,6 +161,30 @@ footer {
   0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
   50% { transform: translateY(60vh) translateX(20px) rotate(180deg); }
   100% { transform: translateY(120vh) translateX(-10px) rotate(360deg); opacity: 0; }
+}
+
+.background-coracoes {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.background-coracoes div {
+  position: absolute;
+  color: rgba(255,182,193,0.5);
+  font-size: 16px;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(1); opacity: 0; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
 }
 
 button {
@@ -158,21 +223,25 @@ button:hover {
 </header>
 
 <section class="galeria">
-  <div>
+  <div class="foto-container">
     <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
     <div class="nome-foto">Gabrielle 💖</div>
+    <div class="tooltip">Minha namorada linda 💕</div>
   </div>
-  <div>
+  <div class="foto-container">
     <img class="foto" src="img/foto-udson.jpg" alt="Udson">
     <div class="nome-foto">Udson 💙</div>
+    <div class="tooltip">Eu, apaixonado 😍</div>
   </div>
-  <div>
+  <div class="foto-container">
     <img class="foto" src="img/gato-gabrielle.jpg" alt="Gato da Gabrielle">
     <div class="nome-foto">Gatinho dela 🐱</div>
+    <div class="tooltip">O fofo dela 🐾</div>
   </div>
-  <div>
+  <div class="foto-container">
     <img class="foto" src="img/cachorro-udson.jpg" alt="Cachorro do Udson">
     <div class="nome-foto">Cachorrinho meu 🐶</div>
+    <div class="tooltip">Meu amigo peludo 🐾</div>
   </div>
 </section>
 
@@ -193,6 +262,9 @@ button:hover {
   Feito com amor 💕
 </footer>
 
+<!-- Fundo de corações -->
+<div class="background-coracoes" id="background-coracoes"></div>
+
 <!-- MÚSICA -->
 <audio id="musica" loop autoplay>
   <source src="audio/amor.mp3.mp3" type="audio/mpeg">
@@ -202,6 +274,7 @@ button:hover {
 const inicio = new Date("2025-07-21T00:00:00");
 const musica = document.getElementById("musica");
 
+// Contador
 function atualizarContador() {
   const agora = new Date();
   let diff = Math.floor((agora - inicio)/1000);
@@ -213,10 +286,10 @@ function atualizarContador() {
   const d = Math.floor(diff/24);
 
   document.getElementById("contador").innerHTML =
-    `⏳ <strong>${d}</strong> dias, <strong>${h}</strong>h <strong>${m}</strong>m <strong>${s}</strong>s juntos 💞`;
+    `⏳ <strong>${d}</strong> dias 🌸 <strong>${h}</strong>h 💕 <strong>${m}</strong>m 🐾 <strong>${s}</strong>s juntos`;
 }
 
-// Mostrar hora real de Brasília
+// Hora Brasília
 function atualizarHoraBrasil() {
   const agora = new Date();
   const opcoes = { timeZone: 'America/Sao_Paulo', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -235,7 +308,7 @@ function toggleMusica() {
   else musica.pause();
 }
 
-// Criação das pétalas/corações
+// Pétalas/corações flutuantes
 function criarPetala() {
   const p = document.createElement("div");
   p.className = "petala";
@@ -245,7 +318,19 @@ function criarPetala() {
   document.body.appendChild(p);
   setTimeout(()=>p.remove(),8000);
 }
-setInterval(criarPetala, 400); // Ajustei um pouco pra não ficar pesado
+setInterval(criarPetala, 400);
+
+// Fundo corações animados
+const fundo = document.getElementById('background-coracoes');
+for(let i=0;i<30;i++){
+  const c = document.createElement('div');
+  c.innerText = '💖';
+  c.style.left = Math.random()*100 + 'vw';
+  c.style.fontSize = (10 + Math.random()*20) + 'px';
+  c.style.animationDuration = (5 + Math.random()*10) + 's';
+  c.style.animationDelay = Math.random()*5 + 's';
+  fundo.appendChild(c);
+}
 </script>
 
 </body>
