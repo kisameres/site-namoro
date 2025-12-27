@@ -18,25 +18,36 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: white;
   text-align: center;
-  overflow-x: hidden;
+  overflow: hidden;
   background: linear-gradient(270deg, #2b0b16, #000, #3b0c20, #1a0010);
   background-size: 800% 800%;
   animation: gradiente 20s ease infinite;
 }
 
 header {
-  padding: 60px 20px;
+  padding: 70px 20px 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .nomes {
   font-family: 'Dancing Script', cursive;
   font-size: 60px;
   color: #ffb6c1;
-  text-shadow: 0 0 20px rgba(255,182,193,0.8);
+  text-shadow: 2px 2px 10px rgba(255,192,203,0.7);
+  animation: brilho 2s infinite alternate;
+  margin: 0;
 }
 
 .coracao {
+  font-size: 1.2em;
   animation: pulse 1.5s infinite;
+}
+
+@keyframes brilho {
+  0% { text-shadow: 2px 2px 10px rgba(255,192,203,0.7); }
+  50% { text-shadow: 2px 2px 20px rgba(255,182,193,0.9); }
+  100% { text-shadow: 2px 2px 10px rgba(255,192,203,0.7); }
 }
 
 @keyframes pulse {
@@ -45,59 +56,81 @@ header {
   100% { transform: scale(1); }
 }
 
+h2 { font-weight: 300; color: #ffb6c1; }
+
 #contador {
   margin-top: 15px;
   font-size: 18px;
   color: #ffd1dc;
+  line-height: 1.6;
 }
 
-button {
-  margin: 10px;
-  padding: 10px 18px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-  background: #ff9ecf;
-}
-
-button:hover {
-  background: #ffb6dc;
-}
-
-.galeria {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin: 30px 0;
-}
-
-.galeria img {
-  width: 260px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(255,192,203,0.6);
-  transition: transform 0.3s;
-}
-
-.galeria img:hover {
-  transform: scale(1.05);
+.relogio {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #ffc2d1;
 }
 
 .poema {
   background: rgba(255,255,255,0.1);
-  padding: 25px;
+  padding: 30px;
   border-radius: 20px;
-  max-width: 800px;
-  margin: 30px auto;
+  line-height: 1.9;
   font-size: 18px;
-  line-height: 1.8;
+  max-width: 900px;
+  margin: 25px auto;
 }
 
 footer {
   margin: 40px 0;
   font-size: 14px;
   color: #ccc;
+  position: relative;
+  z-index: 1;
+}
+
+button {
+  margin: 10px 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#botaoMusica {
+  background-color: #ff99c8;
+  color: #000;
+}
+
+#botaoMusica:hover {
+  background-color: #ffb6d9;
+}
+
+.petala, .brilho, .pequenoBrilho {
+  position: fixed;
+  top: -20px;
+  animation: cair linear infinite;
+  z-index: 0;
+}
+
+.petala { font-size: 24px; }
+.brilho {
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+}
+.pequenoBrilho {
+  width: 3px;
+  height: 3px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+}
+
+@keyframes cair {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
@@ -107,29 +140,29 @@ footer {
 <header>
   <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
   <h2>Desde 21 de julho de 2025</h2>
-
   <div id="contador"></div>
-
+  <div class="relogio" id="relogio"></div>
   <button id="botaoMusica">▶️ Tocar / Pausar Música</button>
+  <p style="margin-top:15px; font-size:14px; color:#aaa;">
+    👉 Clique na tela para ver pétalas e corações 🎵
+  </p>
 </header>
 
-<section class="galeria">
-  <img src="img/foto1.jpg" alt="Nós dois">
-  <img src="img/foto2.jpg" alt="Nosso amor">
+<section>
+  <div class="poema">
+    Nosso amor não se mede apenas em dias,<br>
+    mas em cada segundo que escolhemos ficar.<br><br>
+    Cada hora virou história,<br>
+    cada minuto virou lembrança,<br>
+    cada segundo virou amor.<br><br>
+    Enquanto for você,<br>
+    sempre será casa ❤️
+  </div>
 </section>
 
-<section class="poema">
-  Nosso amor não se mede em dias,<br>
-  mas em cada segundo que escolhemos ficar.<br><br>
-  Enquanto for você,<br>
-  sempre será casa ❤️
-</section>
+<footer>Feito com amor para nossa história 💖</footer>
 
-<footer>
-  Feito com amor 💖
-</footer>
-
-<!-- 🔊 ÁUDIO -->
+<!-- 🎵 MÚSICA -->
 <audio id="musica" loop>
   <source src="audio/amor.mp3.mp3" type="audio/mpeg">
 </audio>
@@ -140,23 +173,19 @@ const musica = document.getElementById("musica");
 const botaoMusica = document.getElementById("botaoMusica");
 
 botaoMusica.addEventListener("click", () => {
-  if (musica.paused) {
-    musica.play();
-  } else {
-    musica.pause();
-  }
+  if (musica.paused) musica.play();
+  else musica.pause();
 });
 
 function atualizarContador() {
   const agora = new Date();
-  let diff = Math.floor((agora - inicio) / 1000);
-
+  let diff = Math.floor((agora - inicio)/1000);
   const segundos = diff % 60;
-  diff = Math.floor(diff / 60);
+  diff = Math.floor(diff/60);
   const minutos = diff % 60;
-  diff = Math.floor(diff / 60);
+  diff = Math.floor(diff/60);
   const horas = diff % 24;
-  const dias = Math.floor(diff / 24);
+  const dias = Math.floor(diff/24);
 
   document.getElementById("contador").innerHTML =
     `⏳ ${dias} dias<br>⏰ ${horas}h ${minutos}m ${segundos}s juntos 💞`;
@@ -164,6 +193,33 @@ function atualizarContador() {
 
 setInterval(atualizarContador, 1000);
 atualizarContador();
+
+setInterval(() => {
+  const agora = new Date();
+  document.getElementById("relogio").innerText =
+    `Agora: ${agora.toLocaleTimeString()}`;
+}, 1000);
+
+function criarElementos() {
+  const tipo = Math.random();
+  const el = document.createElement("div");
+
+  if(tipo > 0.8) {
+    el.className = "brilho";
+  } else if(tipo > 0.4) {
+    el.className = "petala";
+    el.innerText = Math.random() > 0.5 ? "🌹" : "❤️";
+  } else {
+    el.className = "pequenoBrilho";
+  }
+
+  el.style.left = Math.random()*100 + "vw";
+  el.style.animationDuration = (Math.random()*4+3) + "s";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 9000);
+}
+
+setInterval(criarElementos, 200);
 </script>
 
 </body>
