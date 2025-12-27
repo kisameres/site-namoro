@@ -1,164 +1,184 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Udson & Gabrielle ❤️</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Udson ❤️ Gabrielle</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(180deg, #ffe6ec, #fff);
-      color: #333;
-      text-align: center;
-      overflow-x: hidden;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
-    header {
-      padding: 40px 20px 20px;
-    }
+<style>
+@keyframes gradiente {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-    h1 {
-      font-size: 2.5em;
-      color: #d6336c;
-      margin-bottom: 10px;
-    }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+  background: linear-gradient(270deg, #2b0b16, #000, #3b0c20, #1a0010);
+  background-size: 800% 800%;
+  animation: gradiente 20s ease infinite;
+}
 
-    h2 {
-      font-weight: normal;
-      color: #555;
-    }
+header {
+  padding: 60px 20px 20px;
+}
 
-    .contador {
-      margin-top: 20px;
-      font-size: 1.2em;
-      background: rgba(255,255,255,0.7);
-      display: inline-block;
-      padding: 12px 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
+.nomes {
+  font-family: 'Dancing Script', cursive;
+  font-size: 60px;
+  color: #ffb6c1;
+  text-shadow: 2px 2px 15px rgba(255,192,203,0.8);
+}
 
-    .galeria-casal {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      margin: 35px auto;
-      flex-wrap: wrap;
-    }
+.coracao {
+  animation: pulse 1.5s infinite;
+}
 
-    .galeria-casal img {
-      width: 240px;
-      height: 240px;
-      object-fit: cover;
-      border-radius: 22px;
-      box-shadow: 0 0 25px rgba(214,51,108,0.4);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      animation: aparecer 1.5s ease;
-    }
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
 
-    .galeria-casal img:hover {
-      transform: scale(1.07);
-      box-shadow: 0 0 35px rgba(214,51,108,0.7);
-    }
+#contador {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #ffd1dc;
+}
 
-    section.poema {
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 25px;
-      background: rgba(255,255,255,0.8);
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      font-size: 1.1em;
-      line-height: 1.6;
-    }
+.galeria {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin: 40px auto;
+}
 
-    footer {
-      margin: 40px 0 20px;
-      color: #777;
-      font-size: 0.9em;
-    }
+.foto {
+  width: 260px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255,182,193,0.6);
+  transition: transform 0.4s, box-shadow 0.4s;
+}
 
-    @keyframes aparecer {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
+.foto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(255,182,193,0.9);
+}
 
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2em;
-      }
+.nome-foto {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #ffb6c1;
+}
 
-      .galeria-casal img {
-        width: 200px;
-        height: 200px;
-      }
-    }
-  </style>
+.poema {
+  background: rgba(255,255,255,0.1);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 900px;
+  margin: 30px auto;
+  line-height: 1.9;
+  font-size: 18px;
+}
+
+footer {
+  margin: 40px 0;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.petala {
+  position: fixed;
+  top: -20px;
+  font-size: 22px;
+  animation: cair linear infinite;
+}
+
+@keyframes cair {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>Udson & Gabrielle ❤️</h1>
-    <h2>Nosso amor é atemporal</h2>
+<header>
+  <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
+  <h2>Desde 21 de julho de 2025</h2>
+  <div id="contador"></div>
+</header>
 
-    <div class="contador" id="contador"></div>
-  </header>
+<section class="galeria">
+  <div>
+    <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
+    <div class="nome-foto">Gabrielle 💖</div>
+  </div>
 
-  <section>
-    <div class="galeria-casal">
-      <img src="img/foto-gabrielle.jpg" alt="Gabrielle">
-      <img src="img/foto-udson.jpg" alt="Udson">
-    </div>
-  </section>
+  <div>
+    <img class="foto" src="img/foto-udson.jpg" alt="Udson">
+    <div class="nome-foto">Udson 💙</div>
+  </div>
+</section>
 
-  <section class="poema">
-    Nosso amor é atemporal.  
-    Se eu tivesse mais 100 vidas,  
-    não mudaria nada —  
-    viveria todas elas iguais,  
-    ao seu lado. ❤️  
+<section>
+  <div class="poema">
+    Nosso amor não se mede em dias,<br>
+    mas em cada escolha de ficar.<br><br>
 
-    <br><br>
-    Cada dia com você é casa,  
-    é paz, é escolha.  
-    E que o tempo passe,  
-    porque eu sigo te escolhendo  
-    em todos os futuros possíveis.
-  </section>
+    Cada riso virou memória,<br>
+    cada abraço virou lar,<br>
+    cada olhar virou certeza.<br><br>
 
-  <footer>
-    Feito com ❤️ — desde 05/08/2024
-  </footer>
+    Se o tempo passar,<br>
+    que passe ao seu lado.<br><br>
 
-  <script>
-    const inicio = new Date("2024-08-05T00:00:00");
+    <strong>Sempre nós dois ❤️</strong>
+  </div>
+</section>
 
-    function atualizarContador() {
-      const agora = new Date();
-      const diff = agora - inicio;
+<footer>
+  Feito com amor para nossa história 💕
+</footer>
 
-      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutos = Math.floor((diff / (1000 * 60)) % 60);
-      const segundos = Math.floor((diff / 1000) % 60);
+<script>
+const inicio = new Date("2025-07-21T00:00:00");
 
-      document.getElementById("contador").innerHTML =
-        `Juntos há <strong>${dias}</strong> dias, 
-         ${horas}h ${minutos}m ${segundos}s 💕`;
-    }
+function atualizarContador() {
+  const agora = new Date();
+  let diff = Math.floor((agora - inicio)/1000);
+  const s = diff % 60;
+  diff = Math.floor(diff/60);
+  const m = diff % 60;
+  diff = Math.floor(diff/60);
+  const h = diff % 24;
+  const d = Math.floor(diff/24);
 
-    setInterval(atualizarContador, 1000);
-    atualizarContador();
-  </script>
+  document.getElementById("contador").innerHTML =
+    `⏳ ${d} dias, ${h}h ${m}m ${s}s juntos 💞`;
+}
+
+setInterval(atualizarContador, 1000);
+atualizarContador();
+
+function criarPetala() {
+  const p = document.createElement("div");
+  p.className = "petala";
+  p.innerText = Math.random() > 0.5 ? "❤️" : "🌹";
+  p.style.left = Math.random()*100 + "vw";
+  p.style.animationDuration = (Math.random()*4 + 4) + "s";
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),8000);
+}
+
+setInterval(criarPetala, 300);
+</script>
 
 </body>
 </html>
