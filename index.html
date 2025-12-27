@@ -7,185 +7,248 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
 <style>
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  text-align:center;
-  color:white;
-  background:linear-gradient(270deg,#2b0b16,#000,#3b0c20,#1a0010);
-  background-size:800% 800%;
-  animation:gradiente 20s ease infinite;
-}
-@keyframes gradiente{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+@keyframes gradiente {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.nomes{
-  font-family:'Dancing Script',cursive;
-  font-size:60px;
-  color:#ffb6c1;
-  margin-top:60px;
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  background: linear-gradient(270deg, #2b0b16, #000, #3b0c20, #1a0010);
+  background-size: 800% 800%;
+  animation: gradiente 20s ease infinite;
 }
 
-section{
-  max-width:900px;
-  margin:40px auto;
-  background:rgba(255,255,255,.1);
-  padding:30px;
-  border-radius:20px;
+body.day {
+  background: linear-gradient(270deg, #ffe6f0, #ffd9e6, #ffe0f0, #ffd0e0);
+  background-size: 800% 800%;
+  animation: gradiente 20s ease infinite;
+  color: #333;
 }
 
-button{
-  padding:10px 15px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  margin:5px;
+header {
+  padding: 70px 20px 20px;
+  position: relative;
+  z-index: 1;
 }
 
-.hidden{display:none}
+/* NOMES */
+.nomes {
+  font-family: 'Dancing Script', cursive;
+  font-size: 60px;
+  color: #ffb6c1;
+  text-shadow: 2px 2px 15px rgba(255,192,203,0.8);
+  animation: brilho 2s infinite alternate;
+  margin: 0;
+}
+
+.coracao {
+  display: inline-block;
+  animation: pulse 1.4s infinite;
+}
+
+/* FRASE */
+.frase {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #ffd1dc;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* ANIMAÇÕES */
+@keyframes brilho {
+  from { text-shadow: 2px 2px 10px rgba(255,192,203,0.6); }
+  to { text-shadow: 2px 2px 25px rgba(255,182,193,1); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+h2 { font-weight: 300; color: #ffb6c1; }
+
+#contador {
+  margin-top: 12px;
+  font-size: 18px;
+  color: #ffd1dc;
+}
+
+.relogio {
+  margin-top: 6px;
+  font-size: 15px;
+  color: #ffc2d1;
+}
+
+.poema {
+  background: rgba(255,255,255,0.12);
+  padding: 30px;
+  border-radius: 22px;
+  line-height: 1.9;
+  font-size: 18px;
+  max-width: 900px;
+  margin: 30px auto;
+  backdrop-filter: blur(4px);
+}
+
+footer {
+  margin: 40px 0;
+  font-size: 14px;
+  color: #ccc;
+  position: relative;
+  z-index: 1;
+}
+
+button {
+  margin: 10px 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#botaoMusica { background-color: #ff99c8; }
+#botaoTema { background-color: #99ccff; }
+
+/* ELEMENTOS CAINDO */
+.petala, .brilho {
+  position: fixed;
+  top: -20px;
+  animation: cair linear infinite;
+  z-index: 0;
+}
+
+.petala { font-size: 22px; }
+.brilho {
+  width: 4px;
+  height: 4px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+}
+
+@keyframes cair {
+  from { transform: translateY(0) rotate(0deg); opacity: 1; }
+  to { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
 </style>
 </head>
 
 <body>
 
-<h1 class="nomes">Udson ❤️ Gabrielle</h1>
-<h3>Desde 21 de julho de 2025</h3>
-<div id="contador"></div>
+<header>
+  <h1 class="nomes">
+    Udson <span class="coracao">❤️</span> Gabrielle
+  </h1>
 
-<!-- CARTA -->
+  <div class="frase" id="frase"></div>
+
+  <h2>Desde 21 de julho de 2025</h2>
+
+  <div id="contador"></div>
+  <div class="relogio" id="relogio"></div>
+
+  <button id="botaoMusica">▶️ Tocar / Pausar Música</button>
+  <button id="botaoTema">🌞 Trocar Tema</button>
+</header>
+
 <section>
-<h2>💌 Carta aberta</h2>
-<p>
-Gabrielle,<br><br>
-Desde que você entrou na minha vida, tudo ganhou sentido.
-Cada dia ao seu lado é uma escolha, e eu escolheria você em todas as vidas possíveis.
-Você é meu lar, minha paz e meu amor.<br><br>
-Com amor,<br>
-<strong>Udson ❤️</strong>
-</p>
+  <div class="poema">
+    Nosso amor não se mede apenas em dias,<br>
+    mas em cada segundo que escolhemos ficar.<br><br>
+
+    Cada hora virou história,<br>
+    cada minuto virou lembrança,<br>
+    cada segundo virou amor.<br><br>
+
+    Não importa o tempo que passe,<br>
+    enquanto for você,<br>
+    sempre será casa.<br><br>
+
+    <strong>E ainda estamos juntos ❤️</strong>
+  </div>
 </section>
 
-<!-- LINHA DO TEMPO -->
-<section>
-<h2>📍 Nossa história</h2>
-<ul style="text-align:left">
-<li>📅 21/07/2025 – O começo de tudo</li>
-<li>💋 Primeiro beijo</li>
-<li>❤️ Primeiro “eu te amo”</li>
-<li>🌍 Momentos que viraram eternos</li>
-</ul>
-</section>
+<footer>Feito com amor para nossa história 💖</footer>
 
-<!-- GALERIA -->
-<section>
-<h2>📸 Galeria</h2>
-<img src="https://placekitten.com/300/200">
-<img src="https://placekitten.com/301/200">
-<img src="https://placekitten.com/302/200">
-</section>
-
-<!-- PLAYLIST -->
-<section>
-<h2>🎶 Playlist do casal</h2>
-<p>Essas músicas sempre me lembram você 💞</p>
-<audio controls>
-<source src="https://cdn.pixabay.com/audio/2023/03/28/audio_9c4c7b7d6e.mp3">
+<audio id="musica" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_9c4c7b7d6e.mp3">
 </audio>
-</section>
-
-<!-- BOTÃO POR QUE TE AMO -->
-<section>
-<h2>❤️ Por que eu te amo?</h2>
-<button onclick="mostrarMotivo()">Descobrir</button>
-<p id="motivo"></p>
-</section>
-
-<!-- PROMESSAS -->
-<section>
-<h2>💍 Promessas</h2>
-<ul style="text-align:left">
-<li>Viajar o mundo contigo</li>
-<li>Construir nossa casa</li>
-<li>Te escolher todos os dias</li>
-</ul>
-</section>
-
-<!-- QUIZ -->
-<section>
-<h2>🧠 Quiz do casal</h2>
-<p>Onde tudo começou?</p>
-<button onclick="alert('Acertou ❤️')">No nosso primeiro dia</button>
-<button onclick="alert('Errado 😅')">Outro lugar</button>
-</section>
-
-<!-- ÁREA SECRETA -->
-<section>
-<h2>🔐 Área secreta</h2>
-<input type="password" id="senha" placeholder="Senha">
-<button onclick="verificar()">Entrar</button>
-<p id="secreto" class="hidden">
-Se você chegou aqui, é porque é você ❤️
-</p>
-</section>
-
-<!-- CÁPSULA DO TEMPO -->
-<section>
-<h2>🕰️ Cápsula do tempo</h2>
-<p>
-Se você estiver lendo isso no futuro:<br>
-Espero que ainda esteja segurando minha mão.
-</p>
-</section>
-
-<!-- CERTIFICADO -->
-<section>
-<h2>📜 Certificado simbólico</h2>
-<p>
-Certifico que Udson e Gabrielle possuem um amor verdadeiro,
-recíproco e eterno ❤️
-</p>
-</section>
-
-<footer style="margin:40px">Feito com amor 💖</footer>
 
 <script>
-const inicio=new Date("2025-07-21");
-setInterval(()=>{
- let diff=(new Date()-inicio)/1000;
- let d=Math.floor(diff/86400);
- document.getElementById("contador").innerText=
- `⏳ ${d} dias vivendo nossa história ❤️`;
-},1000);
+const inicio = new Date("2025-07-21T00:00:00");
+const musica = document.getElementById("musica");
 
-const motivos=[
-"Porque você é meu lar",
-"Porque seu sorriso me acalma",
-"Porque é você",
-"Porque escolhe ficar"
+document.getElementById("botaoMusica").onclick = () => {
+  musica.paused ? musica.play() : musica.pause();
+};
+
+document.getElementById("botaoTema").onclick = () => {
+  document.body.classList.toggle("day");
+};
+
+// CONTADOR
+function atualizarContador() {
+  const agora = new Date();
+  let diff = Math.floor((agora - inicio) / 1000);
+  const s = diff % 60;
+  diff = Math.floor(diff / 60);
+  const m = diff % 60;
+  diff = Math.floor(diff / 60);
+  const h = diff % 24;
+  const d = Math.floor(diff / 24);
+
+  document.getElementById("contador").innerHTML =
+    `⏳ ${d} dias<br>⏰ ${h}h ${m}m ${s}s juntos 💞`;
+}
+setInterval(atualizarContador, 1000);
+atualizarContador();
+
+// RELÓGIO
+setInterval(() => {
+  document.getElementById("relogio").innerText =
+    "Agora: " + new Date().toLocaleTimeString();
+}, 1000);
+
+// FRASES DE CASAL
+const frases = [
+  "Com você, tudo faz sentido 💕",
+  "Meu lugar favorito é ao seu lado ❤️",
+  "Entre milhões, eu escolheria você",
+  "Nosso amor é simples e verdadeiro",
+  "Você é minha casa"
 ];
-function mostrarMotivo(){
- document.getElementById("motivo").innerText=
- motivos[Math.floor(Math.random()*motivos.length)];
-}
 
-function verificar(){
- if(document.getElementById("senha").value==="amor"){
-  document.getElementById("secreto").classList.remove("hidden");
- }
+let i = 0;
+function trocarFrase() {
+  document.getElementById("frase").innerText = frases[i];
+  i = (i + 1) % frases.length;
 }
+trocarFrase();
+setInterval(trocarFrase, 5000);
 
-document.addEventListener("click",(e)=>{
- const h=document.createElement("div");
- h.innerText="❤️";
- h.style.position="fixed";
- h.style.left=e.clientX+"px";
- h.style.top=e.clientY+"px";
- document.body.appendChild(h);
- setTimeout(()=>h.remove(),800);
-});
+// ELEMENTOS CAINDO
+function criarElemento() {
+  const el = document.createElement("div");
+  if (Math.random() > 0.6) {
+    el.className = "brilho";
+  } else {
+    el.className = "petala";
+    el.innerText = Math.random() > 0.5 ? "❤️" : "🌹";
+  }
+  el.style.left = Math.random() * 100 + "vw";
+  el.style.animationDuration = (Math.random() * 5 + 4) + "s";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 10000);
+}
+setInterval(criarElemento, 300);
 </script>
 
 </body>
