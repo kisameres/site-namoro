@@ -18,21 +18,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: white;
   text-align: center;
+  overflow-x: hidden;
   background: linear-gradient(270deg, #2b0b16, #000, #3b0c20, #1a0010);
   background-size: 800% 800%;
   animation: gradiente 20s ease infinite;
-  overflow-x: hidden;
 }
 
 header {
-  padding: 60px 20px 20px;
+  padding: 60px 20px;
 }
 
 .nomes {
   font-family: 'Dancing Script', cursive;
-  font-size: 58px;
+  font-size: 60px;
   color: #ffb6c1;
-  text-shadow: 2px 2px 15px rgba(255,192,203,0.8);
+  text-shadow: 0 0 20px rgba(255,182,193,0.8);
 }
 
 .coracao {
@@ -52,65 +52,52 @@ header {
 }
 
 button {
-  margin-top: 15px;
-  padding: 10px 22px;
-  border-radius: 20px;
+  margin: 10px;
+  padding: 10px 18px;
+  border-radius: 12px;
   border: none;
-  font-size: 15px;
   cursor: pointer;
-  background: #ffb6c1;
-  color: #000;
+  font-size: 15px;
+  background: #ff9ecf;
 }
 
 button:hover {
-  background: #ffd1dc;
+  background: #ffb6dc;
 }
 
 .galeria {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 20px;
   flex-wrap: wrap;
-  margin: 40px auto;
+  margin: 30px 0;
 }
 
-.foto {
+.galeria img {
   width: 260px;
   border-radius: 20px;
-  box-shadow: 0 0 25px rgba(255,182,193,0.6);
-  transition: transform 0.4s;
+  box-shadow: 0 0 20px rgba(255,192,203,0.6);
+  transition: transform 0.3s;
 }
 
-.foto:hover {
+.galeria img:hover {
   transform: scale(1.05);
 }
 
 .poema {
-  background: rgba(255,255,255,0.12);
-  padding: 30px;
+  background: rgba(255,255,255,0.1);
+  padding: 25px;
   border-radius: 20px;
-  max-width: 900px;
+  max-width: 800px;
   margin: 30px auto;
-  line-height: 1.9;
   font-size: 18px;
+  line-height: 1.8;
 }
 
 footer {
-  margin: 40px;
+  margin: 40px 0;
   font-size: 14px;
   color: #ccc;
-}
-
-.petala {
-  position: fixed;
-  top: -20px;
-  font-size: 22px;
-  animation: cair linear infinite;
-}
-
-@keyframes cair {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
@@ -120,82 +107,63 @@ footer {
 <header>
   <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
   <h2>Desde 21 de julho de 2025</h2>
+
   <div id="contador"></div>
 
-  <button id="btnMusica">🎵 Tocar Música</button>
+  <button id="botaoMusica">▶️ Tocar / Pausar Música</button>
 </header>
 
 <section class="galeria">
-  <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
-  <img class="foto" src="img/foto-udson.jpg" alt="Udson">
+  <img src="img/foto1.jpg" alt="Nós dois">
+  <img src="img/foto2.jpg" alt="Nosso amor">
 </section>
 
-<section>
-  <div class="poema">
-    Nosso amor não se mede em dias,<br>
-    mas em cada segundo escolhido juntos.<br><br>
-
-    Cada riso virou memória,<br>
-    cada abraço virou lar,<br>
-    cada olhar virou certeza.<br><br>
-
-    <strong>Sempre nós dois ❤️</strong>
-  </div>
+<section class="poema">
+  Nosso amor não se mede em dias,<br>
+  mas em cada segundo que escolhemos ficar.<br><br>
+  Enquanto for você,<br>
+  sempre será casa ❤️
 </section>
 
 <footer>
-  Feito com amor 💕
+  Feito com amor 💖
 </footer>
 
+<!-- 🔊 ÁUDIO -->
 <audio id="musica" loop>
-  <source src="audio/amor.mp3" type="audio/mpeg">
+  <source src="audio/amor.mp3.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const inicio = new Date("2025-07-21T00:00:00");
 const musica = document.getElementById("musica");
-const btnMusica = document.getElementById("btnMusica");
-let tocando = false;
+const botaoMusica = document.getElementById("botaoMusica");
 
-btnMusica.addEventListener("click", () => {
-  musica.volume = 0.4;
-  if (!tocando) {
+botaoMusica.addEventListener("click", () => {
+  if (musica.paused) {
     musica.play();
-    btnMusica.innerText = "⏸️ Pausar Música";
-    tocando = true;
   } else {
     musica.pause();
-    btnMusica.innerText = "🎵 Tocar Música";
-    tocando = false;
   }
 });
 
 function atualizarContador() {
   const agora = new Date();
-  let diff = Math.floor((agora - inicio)/1000);
-  const s = diff % 60;
-  diff = Math.floor(diff/60);
-  const m = diff % 60;
-  diff = Math.floor(diff/60);
-  const h = diff % 24;
-  const d = Math.floor(diff/24);
+  let diff = Math.floor((agora - inicio) / 1000);
+
+  const segundos = diff % 60;
+  diff = Math.floor(diff / 60);
+  const minutos = diff % 60;
+  diff = Math.floor(diff / 60);
+  const horas = diff % 24;
+  const dias = Math.floor(diff / 24);
 
   document.getElementById("contador").innerHTML =
-    `⏳ ${d} dias, ${h}h ${m}m ${s}s juntos 💞`;
+    `⏳ ${dias} dias<br>⏰ ${horas}h ${minutos}m ${segundos}s juntos 💞`;
 }
+
 setInterval(atualizarContador, 1000);
 atualizarContador();
-
-function criarPetala() {
-  const p = document.createElement("div");
-  p.className = "petala";
-  p.innerText = Math.random() > 0.5 ? "❤️" : "🌹";
-  p.style.left = Math.random()*100 + "vw";
-  p.style.animationDuration = (Math.random()*4 + 4) + "s";
-  document.body.appendChild(p);
-  setTimeout(()=>p.remove(),8000);
-}
-setInterval(criarPetala, 350);
 </script>
 
 </body>
