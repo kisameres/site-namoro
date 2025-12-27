@@ -24,7 +24,7 @@ body {
   overflow-x: hidden;
 }
 
-/* MODO ESCURO PROFUNDO */
+/* 🌙 MODO ESCURO PROFUNDO */
 body.dark {
   background: linear-gradient(270deg, #050008, #0b0012, #050008);
   background-size: 600% 600%;
@@ -32,23 +32,10 @@ body.dark {
   color: #d6b2b8;
 }
 
-body.dark .nomes {
-  color: #c79aa6;
-  text-shadow: 0 0 6px rgba(255,182,193,0.2);
-}
-
-body.dark .poema {
-  background: rgba(255,255,255,0.03);
-}
-
-body.dark footer {
-  color: #999;
-}
-
-body.dark button {
-  background: #b98b95;
-  color: #000;
-}
+body.dark .nomes { color: #c79aa6; }
+body.dark .poema { background: rgba(255,255,255,0.03); }
+body.dark footer { color: #999; }
+body.dark button { background: #b98b95; }
 
 /* HEADER */
 header {
@@ -65,6 +52,10 @@ header {
   animation: slideFade 1s forwards;
 }
 
+@keyframes slideFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .coracao {
   animation: pulse 2s infinite;
 }
@@ -75,15 +66,10 @@ header {
   100% { transform: scale(1); }
 }
 
-@keyframes slideFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
 #contador, #hora-brasil {
   opacity: 0;
   animation: slideFade 1.5s forwards;
 }
-
 #contador { animation-delay: .5s; }
 #hora-brasil { animation-delay: .8s; }
 
@@ -104,25 +90,64 @@ header {
   width: 260px;
   border-radius: 20px;
   box-shadow: 0 0 15px rgba(255,182,193,0.2);
-  transition: transform 0.5s, box-shadow 0.5s;
+  transition: transform 0.4s, box-shadow 0.4s;
   opacity: 0;
   transform: translateY(20px);
   animation: fadeSlide 1s forwards;
-}
-
-.foto:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(255,182,193,0.3);
 }
 
 @keyframes fadeSlide {
   to { opacity: 1; transform: translateY(0); }
 }
 
+.foto:hover {
+  box-shadow: 0 0 25px rgba(255,182,193,0.35);
+}
+
+/* 🐱 GATO */
+.gato:hover {
+  animation: balanco 0.6s infinite alternate;
+}
+
+@keyframes balanco {
+  from { transform: rotate(-2deg) scale(1.05); }
+  to { transform: rotate(2deg) scale(1.05); }
+}
+
+/* 🐶 CACHORRO */
+.cachorro:hover {
+  animation: pulo 0.5s infinite alternate;
+}
+
+@keyframes pulo {
+  from { transform: translateY(0) scale(1.05); }
+  to { transform: translateY(-10px) scale(1.05); }
+}
+
 .nome-foto {
   margin-top: 10px;
   font-size: 16px;
   color: #d9a6b0;
+}
+
+/* 💬 TOOLTIP */
+.tooltip {
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,182,193,0.25);
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.foto-container:hover .tooltip {
+  opacity: 1;
 }
 
 /* POEMA */
@@ -159,22 +184,9 @@ button {
   background: #d9a6b0;
 }
 
-/* PÉTALAS */
-.petala {
-  position: fixed;
-  top: -20px;
-  font-size: 18px;
-  animation: cair linear infinite;
-  text-shadow: 0 0 5px rgba(255,182,193,0.3);
-}
-
-@keyframes cair {
-  0% { transform: translateY(0) rotate(0deg); opacity: .5; }
-  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
-}
-
 /* MOBILE */
 @media (max-width: 600px) {
+  .tooltip { display: none; }
   .foto { width: 80%; max-width: 250px; }
   .nomes { font-size: 40px; }
 }
@@ -197,10 +209,25 @@ button {
   <div class="foto-container">
     <img class="foto" src="img/foto-gabrielle.jpg">
     <div class="nome-foto">Gabrielle 💖</div>
+    <div class="tooltip">Minha princesa ❤️</div>
   </div>
+
   <div class="foto-container">
     <img class="foto" src="img/foto-udson.jpg">
     <div class="nome-foto">Udson 💙</div>
+    <div class="tooltip">Apaixonado por ela 😍</div>
+  </div>
+
+  <div class="foto-container">
+    <img class="foto gato" src="img/gato-gabrielle.jpg">
+    <div class="nome-foto">Gatinho dela 🐱</div>
+    <div class="tooltip">O xodó da mamãe 💕</div>
+  </div>
+
+  <div class="foto-container">
+    <img class="foto cachorro" src="img/cachorro-udson.jpg">
+    <div class="nome-foto">Cachorrinho dele 🐶</div>
+    <div class="tooltip">Companheiro fiel 🐾</div>
   </div>
 </section>
 
@@ -212,7 +239,7 @@ mas em cada segundo escolhido juntos.<br><br>
 
 <footer>Feito com amor 💕</footer>
 
-<!-- MP3 NÃO ALTERADO -->
+<!-- 🎵 MP3 MANTIDO -->
 <audio id="musica" loop autoplay>
   <source src="audio/amor.mp3.mp3" type="audio/mpeg">
 </audio>
@@ -221,48 +248,28 @@ mas em cada segundo escolhido juntos.<br><br>
 const inicio = new Date("2025-07-21T00:00:00");
 const musica = document.getElementById("musica");
 
-// CONTADOR
 function atualizar() {
   const agora = new Date();
   let diff = Math.floor((agora - inicio)/1000);
-  const s = diff % 60; diff = Math.floor(diff/60);
-  const m = diff % 60; diff = Math.floor(diff/60);
-  const h = diff % 24;
+  const s = diff%60; diff=Math.floor(diff/60);
+  const m = diff%60; diff=Math.floor(diff/60);
+  const h = diff%24;
   const d = Math.floor(diff/24);
-
   contador.innerHTML = `⏳ ${d} dias ${h}h ${m}m ${s}s juntos`;
 }
-setInterval(atualizar, 1000);
+setInterval(atualizar,1000);
 
-// MÚSICA
 function toggleMusica() {
   musica.paused ? musica.play() : musica.pause();
 }
 
-// MODO ESCURO PROFUNDO
 function toggleDark() {
   document.body.classList.toggle("dark");
-  localStorage.setItem(
-    "modo-escuro",
-    document.body.classList.contains("dark")
-  );
+  localStorage.setItem("modo-escuro", document.body.classList.contains("dark"));
 }
-
-if (localStorage.getItem("modo-escuro") === "true") {
+if (localStorage.getItem("modo-escuro")==="true") {
   document.body.classList.add("dark");
 }
-
-// PÉTALAS
-function criarPetala() {
-  const p = document.createElement("div");
-  p.className = "petala";
-  p.innerText = "❤️";
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.animationDuration = (8 + Math.random() * 4) + "s";
-  document.body.appendChild(p);
-  setTimeout(() => p.remove(), 12000);
-}
-setInterval(criarPetala, 900);
 </script>
 
 </body>
