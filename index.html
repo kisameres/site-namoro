@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
 <style>
+/* GRADIENTE ESCURO */
 @keyframes gradiente {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -16,15 +17,16 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  color: #ffe4e1;
+  color: #f0c0c0;
   text-align: center;
-  background: linear-gradient(270deg, #3a0d1c, #1f0a14, #4b0e25, #1f0a14);
+  background: linear-gradient(270deg, #1a0010, #2b001b, #1f0014, #2b001b);
   background-size: 800% 800%;
   animation: gradiente 40s ease infinite;
   overflow-x: hidden;
   position: relative;
 }
 
+/* HEADER */
 header {
   padding: 50px 20px 20px;
 }
@@ -32,8 +34,8 @@ header {
 .nomes {
   font-family: 'Dancing Script', cursive;
   font-size: 60px;
-  color: #f4c2c2;
-  text-shadow: 1px 1px 10px rgba(255,192,203,0.5);
+  color: #d9a6b0;
+  text-shadow: 1px 1px 8px rgba(255,192,203,0.3);
   opacity: 0;
   transform: translateY(-30px);
   animation: slideFade 1s forwards;
@@ -56,7 +58,7 @@ header {
 #contador {
   margin-top: 15px;
   font-size: 20px;
-  color: #ffe4e1;
+  color: #f0c0c0;
   opacity: 0;
   animation: slideFade 1.5s forwards;
   animation-delay: 0.5s;
@@ -64,13 +66,14 @@ header {
 
 #hora-brasil {
   font-size: 16px;
-  color: #ffe4e1;
+  color: #f0c0c0;
   margin-top: 5px;
   opacity: 0;
   animation: slideFade 1.5s forwards;
   animation-delay: 0.8s;
 }
 
+/* GALERIA */
 .galeria {
   display: flex;
   justify-content: center;
@@ -86,7 +89,7 @@ header {
 .foto {
   width: 260px;
   border-radius: 20px;
-  box-shadow: 0 0 20px rgba(255,182,193,0.4);
+  box-shadow: 0 0 15px rgba(255,182,193,0.2);
   transition: transform 0.5s, box-shadow 0.5s;
   opacity: 0;
   animation: fadeSlide 1s forwards;
@@ -94,7 +97,7 @@ header {
 
 .foto:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(255,182,193,0.6);
+  box-shadow: 0 0 25px rgba(255,182,193,0.3);
 }
 
 .foto:hover + .tooltip {
@@ -109,7 +112,7 @@ header {
 .nome-foto {
   margin-top: 10px;
   font-size: 16px;
-  color: #f4c2c2;
+  color: #d9a6b0;
 }
 
 .tooltip {
@@ -117,7 +120,7 @@ header {
   bottom: 110%;
   left: 50%;
   transform: translateX(-50%) translateY(0);
-  background: rgba(255,182,193,0.5);
+  background: rgba(255,182,193,0.2);
   color: #000;
   padding: 5px 10px;
   border-radius: 10px;
@@ -128,6 +131,7 @@ header {
   white-space: nowrap;
 }
 
+/* POEMA */
 .poema {
   background: rgba(255,255,255,0.05);
   padding: 30px;
@@ -143,18 +147,20 @@ header {
   animation-delay: 1s;
 }
 
+/* FOOTER */
 footer {
   margin: 40px 0;
   font-size: 14px;
   color: #ccc;
 }
 
+/* PÉTALAS / CORAÇÕES */
 .petala {
   position: fixed;
   top: -20px;
   font-size: 18px;
   animation: cair linear infinite;
-  text-shadow: 0 0 8px rgba(255,182,193,0.4);
+  text-shadow: 0 0 5px rgba(255,182,193,0.3);
 }
 
 @keyframes cair {
@@ -176,8 +182,8 @@ footer {
 
 .background-coracoes div {
   position: absolute;
-  color: rgba(255,182,193,0.3);
-  font-size: 14px;
+  color: rgba(255,182,193,0.2);
+  font-size: 12px;
   animation: floatUp linear infinite;
 }
 
@@ -187,6 +193,7 @@ footer {
   100% { transform: translateY(-10vh) scale(1.3); opacity: 0; }
 }
 
+/* BOTÃO */
 button {
   margin-top: 15px;
   padding: 10px 20px;
@@ -194,16 +201,16 @@ button {
   border: none;
   font-size: 15px;
   cursor: pointer;
-  background: #f4c2c2;
+  background: #d9a6b0;
   color: #000;
   transition: background 0.3s;
 }
 
 button:hover {
-  background: #f7c6c6;
+  background: #e0b0b0;
 }
 
-/* Responsividade */
+/* RESPONSIVO */
 @media (max-width: 600px) {
   .foto { width: 80%; max-width: 250px; }
   .nomes { font-size: 40px; }
@@ -304,7 +311,6 @@ function toggleMusica() {
 
 // PÉTALAS
 let temaEmoji = '❤️';
-
 function criarPetala() {
   const p = document.createElement("div");
   p.className = "petala";
@@ -327,47 +333,6 @@ for(let i=0;i<30;i++){
   c.style.animationDelay = Math.random()*5 + 's';
   fundo.appendChild(c);
 }
-
-// TEMAS SAZONAIS SUAVES
-function temaDoDia() {
-  const hoje = new Date();
-  const mes = hoje.getMonth() + 1;
-  const dia = hoje.getDate();
-
-  if (mes === 12 && dia >= 20) { // Natal
-    document.body.style.background = 'linear-gradient(270deg, #4a1f1f, #7b2b2b, #b17a7a, #4a1f1f)';
-    temaEmoji = '🎄';
-  } 
-  else if ((mes === 12 && dia === 31) || (mes === 1 && dia === 1)) { // Ano Novo
-    document.body.style.background = 'linear-gradient(270deg, #1a1a2e, #5a5aa0, #bfc0e0)';
-    temaEmoji = '🎆';
-  } 
-  else if (mes === 4 && dia >= 1 && dia <= 20) { // Páscoa
-    document.body.style.background = 'linear-gradient(270deg, #f7e6f0, #f7d8e0, #e8d0f0)';
-    temaEmoji = '🐣';
-  } 
-  else if (mes === 6 && dia === 12) { // Dia dos Namorados
-    document.body.style.background = 'linear-gradient(270deg, #ffb6c1, #f7c6c6, #ffc0cb)';
-    temaEmoji = '💘';
-  }
-  else if (mes === 10 && dia === 31) { // Halloween
-    document.body.style.background = 'linear-gradient(270deg, #332211, #ff8c00, #ffb266)';
-    temaEmoji = '🎃';
-  }
-  else if ((mes === 9 || mes === 10)) { // Primavera
-    document.body.style.background = 'linear-gradient(270deg, #fbe6f0, #f7d8e0, #e8f0f7)';
-    temaEmoji = '🌸';
-  }
-  else { // Normal
-    document.body.style.background = 'linear-gradient(270deg, #3a0d1c, #1f0a14, #4b0e25, #1f0a14)';
-    temaEmoji = '❤️';
-  }
-}
-
-// Inicializa tema e atualiza a cada hora
-temaDoDia();
-setInterval(temaDoDia, 3600000);
-
 </script>
 
 </body>
