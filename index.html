@@ -271,10 +271,10 @@ button:hover {
 </audio>
 
 <script>
+// CONTADOR E HORA
 const inicio = new Date("2025-07-21T00:00:00");
 const musica = document.getElementById("musica");
 
-// Contador
 function atualizarContador() {
   const agora = new Date();
   let diff = Math.floor((agora - inicio)/1000);
@@ -289,7 +289,6 @@ function atualizarContador() {
     `⏳ <strong>${d}</strong> dias 🌸 <strong>${h}</strong>h 💕 <strong>${m}</strong>m 🐾 <strong>${s}</strong>s juntos`;
 }
 
-// Hora Brasília
 function atualizarHoraBrasil() {
   const agora = new Date();
   const opcoes = { timeZone: 'America/Sao_Paulo', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -297,22 +296,19 @@ function atualizarHoraBrasil() {
   document.getElementById("hora-brasil").innerHTML = `🕒 Hora de Brasília: ${horaBR}`;
 }
 
-setInterval(() => { 
-  atualizarContador(); 
-  atualizarHoraBrasil();
-}, 1000);
+setInterval(() => { atualizarContador(); atualizarHoraBrasil(); }, 1000);
 
-// Música play/pause
+// TOGGLE MÚSICA
 function toggleMusica() {
   if (musica.paused) musica.play();
   else musica.pause();
 }
 
-// Pétalas/corações flutuantes
+// PÉTALAS
 function criarPetala() {
   const p = document.createElement("div");
   p.className = "petala";
-  p.innerText = Math.random() > 0.5 ? "❤️" : "🌹";
+  p.innerText = temaEmoji;
   p.style.left = Math.random()*100 + "vw";
   p.style.animationDuration = (Math.random()*4 + 4) + "s";
   document.body.appendChild(p);
@@ -320,7 +316,7 @@ function criarPetala() {
 }
 setInterval(criarPetala, 400);
 
-// Fundo corações animados
+// FUNDO CORAÇÕES
 const fundo = document.getElementById('background-coracoes');
 for(let i=0;i<30;i++){
   const c = document.createElement('div');
@@ -331,6 +327,50 @@ for(let i=0;i<30;i++){
   c.style.animationDelay = Math.random()*5 + 's';
   fundo.appendChild(c);
 }
+
+// --- TEMAS SAZONAIS ---
+let temaEmoji = '❤️';
+
+function temaDoDia() {
+  const hoje = new Date();
+  const mes = hoje.getMonth() + 1;
+  const dia = hoje.getDate();
+
+  if (mes === 12 && dia >= 20) { // Natal
+    document.body.style.background = 'linear-gradient(270deg, #8B0000, #FF0000, #FFA500, #8B0000)';
+    temaEmoji = '🎄';
+  } 
+  else if ((mes === 12 && dia === 31) || (mes === 1 && dia === 1)) { // Ano Novo
+    document.body.style.background = 'linear-gradient(270deg, #000, #FFD700, #FFF)';
+    temaEmoji = '🎆';
+  } 
+  else if (mes === 4 && dia >= 1 && dia <= 20) { // Páscoa
+    document.body.style.background = 'linear-gradient(270deg, #FFE4E1, #FFDAB9, #E6E6FA)';
+    temaEmoji = '🐣';
+  } 
+  else if (mes === 6 && dia === 12) { // Dia dos Namorados
+    document.body.style.background = 'linear-gradient(270deg, #FF69B4, #FFB6C1, #FFC0CB)';
+    temaEmoji = '💘';
+  }
+  else if (mes === 10 && dia === 31) { // Halloween
+    document.body.style.background = 'linear-gradient(270deg, #000, #FF8C00, #FF4500)';
+    temaEmoji = '🎃';
+  }
+  else if ((mes === 9 || mes === 10)) { // Primavera
+    document.body.style.background = 'linear-gradient(270deg, #FFE4E1, #FFDAB9, #E6E6FA)';
+    temaEmoji = '🌸';
+  }
+  else { // Normal
+    document.body.style.background = 'linear-gradient(270deg, #2b0b16, #000, #3b0c20, #1a0010)';
+    temaEmoji = '❤️';
+  }
+}
+
+// Atualiza tema ao carregar
+temaDoDia();
+// Pode atualizar a cada hora, se quiser:
+setInterval(temaDoDia, 3600000);
+
 </script>
 
 </body>
