@@ -18,35 +18,25 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: white;
   text-align: center;
-  overflow: hidden;
+  overflow-x: hidden;
   background: linear-gradient(270deg, #2b0b16, #000, #3b0c20, #1a0010);
   background-size: 800% 800%;
   animation: gradiente 20s ease infinite;
 }
 
 header {
-  padding: 70px 20px 20px;
-  position: relative;
-  z-index: 1;
+  padding: 60px 20px 20px;
 }
 
 .nomes {
   font-family: 'Dancing Script', cursive;
   font-size: 60px;
   color: #ffb6c1;
-  text-shadow: 2px 2px 10px rgba(255,192,203,0.7);
-  animation: brilho 2s infinite alternate;
-  margin: 0;
+  text-shadow: 2px 2px 15px rgba(255,192,203,0.8);
 }
 
 .coracao {
   animation: pulse 1.5s infinite;
-}
-
-@keyframes brilho {
-  0% { text-shadow: 2px 2px 10px rgba(255,192,203,0.7); }
-  50% { text-shadow: 2px 2px 20px rgba(255,182,193,0.9); }
-  100% { text-shadow: 2px 2px 10px rgba(255,192,203,0.7); }
 }
 
 @keyframes pulse {
@@ -55,34 +45,36 @@ header {
   100% { transform: scale(1); }
 }
 
-h2 {
-  font-weight: 300;
-  color: #ffb6c1;
-}
-
 #contador {
   margin-top: 15px;
   font-size: 18px;
   color: #ffd1dc;
 }
 
-.relogio {
-  margin-top: 8px;
+.galeria {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin: 40px auto;
+}
+
+.foto {
+  width: 260px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255,182,193,0.6);
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+
+.foto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(255,182,193,0.9);
+}
+
+.nome-foto {
+  margin-top: 10px;
   font-size: 16px;
-  color: #ffc2d1;
-}
-
-button {
-  margin: 10px 5px;
-  padding: 8px 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-#botaoMusica {
-  background-color: #ff99c8;
+  color: #ffb6c1;
 }
 
 .poema {
@@ -90,49 +82,27 @@ button {
   padding: 30px;
   border-radius: 20px;
   max-width: 900px;
-  margin: 25px auto;
-  font-size: 18px;
+  margin: 30px auto;
   line-height: 1.9;
-  z-index: 1;
-  position: relative;
+  font-size: 18px;
 }
 
-/* 💑 GALERIA */
-.galeria {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin: 30px 0;
-  z-index: 1;
-  position: relative;
+footer {
+  margin: 40px 0;
+  font-size: 14px;
+  color: #ccc;
 }
 
-.galeria img {
-  width: 260px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(255,192,203,0.6);
-  transition: transform 0.3s;
-}
-
-.galeria img:hover {
-  transform: scale(1.05);
-}
-
-.petala, .brilho, .pequenoBrilho {
+.petala {
   position: fixed;
   top: -20px;
+  font-size: 22px;
   animation: cair linear infinite;
-  z-index: 0;
 }
 
-.petala { font-size: 24px; }
-.brilho { width: 6px; height: 6px; background: white; border-radius: 50%; }
-.pequenoBrilho { width: 3px; height: 3px; background: white; border-radius: 50%; }
-
 @keyframes cair {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(120vh) rotate(360deg); }
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
@@ -143,53 +113,71 @@ button {
   <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
   <h2>Desde 21 de julho de 2025</h2>
   <div id="contador"></div>
-  <div class="relogio" id="relogio"></div>
-  <button id="botaoMusica">▶️ Tocar / Pausar Música</button>
 </header>
 
-<div class="poema">
-  Nosso amor não se mede apenas em dias,<br>
-  mas em cada segundo que escolhemos ficar.<br><br>
-  Enquanto for você,<br>
-  sempre será casa ❤️
-</div>
-
-<!-- 📸 FOTOS -->
 <section class="galeria">
-  <img src="img/foto1.jpg" alt="Nossa foto">
-  <img src="img/foto2.jpg" alt="Nossa foto">
+  <div>
+    <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
+    <div class="nome-foto">Gabrielle 💖</div>
+  </div>
+
+  <div>
+    <img class="foto" src="img/foto-udson.jpg" alt="Udson">
+    <div class="nome-foto">Udson 💙</div>
+  </div>
 </section>
 
-<audio id="musica" loop>
-  <source src="audio/amor.mp3.mp3" type="audio/mpeg">
-</audio>
+<section>
+  <div class="poema">
+    Nosso amor não se mede em dias,<br>
+    mas em cada escolha de ficar.<br><br>
+
+    Cada riso virou memória,<br>
+    cada abraço virou lar,<br>
+    cada olhar virou certeza.<br><br>
+
+    Se o tempo passar,<br>
+    que passe ao seu lado.<br><br>
+
+    <strong>Sempre nós dois ❤️</strong>
+  </div>
+</section>
+
+<footer>
+  Feito com amor para nossa história 💕
+</footer>
 
 <script>
 const inicio = new Date("2025-07-21T00:00:00");
-const musica = document.getElementById("musica");
 
-document.getElementById("botaoMusica").onclick = () => {
-  musica.paused ? musica.play() : musica.pause();
-};
-
-setInterval(() => {
+function atualizarContador() {
   const agora = new Date();
-  const diff = Math.floor((agora - inicio) / 1000);
-  document.getElementById("contador").innerHTML =
-    `⏳ ${Math.floor(diff/86400)} dias juntos 💞`;
-  document.getElementById("relogio").innerText =
-    agora.toLocaleTimeString();
-}, 1000);
+  let diff = Math.floor((agora - inicio)/1000);
+  const s = diff % 60;
+  diff = Math.floor(diff/60);
+  const m = diff % 60;
+  diff = Math.floor(diff/60);
+  const h = diff % 24;
+  const d = Math.floor(diff/24);
 
-setInterval(() => {
-  const el = document.createElement("div");
-  el.className = Math.random() > 0.5 ? "petala" : "brilho";
-  el.innerText = "❤️";
-  el.style.left = Math.random() * 100 + "vw";
-  el.style.animationDuration = "6s";
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 6000);
-}, 300);
+  document.getElementById("contador").innerHTML =
+    `⏳ ${d} dias, ${h}h ${m}m ${s}s juntos 💞`;
+}
+
+setInterval(atualizarContador, 1000);
+atualizarContador();
+
+function criarPetala() {
+  const p = document.createElement("div");
+  p.className = "petala";
+  p.innerText = Math.random() > 0.5 ? "❤️" : "🌹";
+  p.style.left = Math.random()*100 + "vw";
+  p.style.animationDuration = (Math.random()*4 + 4) + "s";
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),8000);
+}
+
+setInterval(criarPetala, 300);
 </script>
 
 </body>
