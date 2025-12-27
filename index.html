@@ -51,6 +51,63 @@ header {
   color: #ffd1dc;
 }
 
+.galeria {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin: 40px auto;
+}
+
+.foto {
+  width: 260px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255,182,193,0.6);
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+
+.foto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(255,182,193,0.9);
+}
+
+.nome-foto {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #ffb6c1;
+}
+
+.poema {
+  background: rgba(255,255,255,0.1);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 900px;
+  margin: 30px auto;
+  line-height: 1.9;
+  font-size: 18px;
+  font-family: 'Dancing Script', cursive;
+}
+
+footer {
+  margin: 40px 0;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.petala {
+  position: fixed;
+  top: -20px;
+  font-size: 22px;
+  animation: cair linear infinite;
+  text-shadow: 0 0 10px rgba(255,182,193,0.7);
+}
+
+@keyframes cair {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
+  50% { transform: translateY(60vh) translateX(20px) rotate(180deg); }
+  100% { transform: translateY(120vh) translateX(-10px) rotate(360deg); opacity: 0; }
+}
+
 button {
   margin-top: 15px;
   padding: 10px 20px;
@@ -65,63 +122,36 @@ button {
 button:hover {
   background: #ffd1dc;
 }
-
-.galeria {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-  margin: 40px auto;
-}
-
-.foto {
-  width: 260px;
-  border-radius: 20px;
-  box-shadow: 0 0 25px rgba(255,182,193,0.6);
-  transition: transform 0.4s;
-}
-
-.foto:hover {
-  transform: scale(1.05);
-}
-
-.poema {
-  background: rgba(255,255,255,0.1);
-  padding: 30px;
-  border-radius: 20px;
-  max-width: 900px;
-  margin: 30px auto;
-  line-height: 1.9;
-  font-size: 18px;
-}
-
-.petala {
-  position: fixed;
-  top: -20px;
-  font-size: 22px;
-  animation: cair linear infinite;
-}
-
-@keyframes cair {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
-}
 </style>
 </head>
 
-<body onclick="iniciarMusica()">
+<body>
 
 <header>
   <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
   <h2>Desde 21 de julho de 2025</h2>
   <div id="contador"></div>
-
+  <div id="hora-brasil"></div>
   <button onclick="toggleMusica()">🎵 Tocar / Pausar Música</button>
 </header>
 
 <section class="galeria">
-  <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
-  <img class="foto" src="img/foto-udson.jpg" alt="Udson">
+  <div>
+    <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
+    <div class="nome-foto">Gabrielle 💖</div>
+  </div>
+  <div>
+    <img class="foto" src="img/foto-udson.jpg" alt="Udson">
+    <div class="nome-foto">Udson 💙</div>
+  </div>
+  <div>
+    <img class="foto" src="img/gato-preto.jpg" alt="Gato Preto">
+    <div class="nome-foto">Nosso gatinho 🖤</div>
+  </div>
+  <div>
+    <img class="foto" src="img/gato-branco.jpg" alt="Gato Branco">
+    <div class="nome-foto">Nosso gatinho 🤍</div>
+  </div>
 </section>
 
 <section>
@@ -137,19 +167,18 @@ button:hover {
   </div>
 </section>
 
-<footer style="margin:40px;color:#ccc;">
+<footer>
   Feito com amor 💕
 </footer>
 
 <!-- MÚSICA -->
-<audio id="musica" loop>
+<audio id="musica" loop autoplay>
   <source src="audio/amor.mp3.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const inicio = new Date("2025-07-21T00:00:00");
 const musica = document.getElementById("musica");
-let musicaIniciada = false;
 
 function atualizarContador() {
   const agora = new Date();
@@ -164,22 +193,27 @@ function atualizarContador() {
   document.getElementById("contador").innerHTML =
     `⏳ ${d} dias, ${h}h ${m}m ${s}s juntos 💞`;
 }
-setInterval(atualizarContador, 1000);
-atualizarContador();
 
+// Função para mostrar hora real de Brasília
+function atualizarHoraBrasil() {
+  const agora = new Date();
+  const opcoes = { timeZone: 'America/Sao_Paulo', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  const horaBR = agora.toLocaleTimeString('pt-BR', opcoes);
+  document.getElementById("hora-brasil").innerHTML = `🕒 Hora de Brasília: ${horaBR}`;
+}
+
+setInterval(() => { 
+  atualizarContador(); 
+  atualizarHoraBrasil();
+}, 1000);
+
+// Música play/pause
 function toggleMusica() {
   if (musica.paused) musica.play();
   else musica.pause();
 }
 
-function iniciarMusica() {
-  if (!musicaIniciada) {
-    musica.volume = 0.4;
-    musica.play();
-    musicaIniciada = true;
-  }
-}
-
+// Criação das pétalas/corações
 function criarPetala() {
   const p = document.createElement("div");
   p.className = "petala";
