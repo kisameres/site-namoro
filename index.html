@@ -30,7 +30,7 @@ header {
 
 .nomes {
   font-family: 'Dancing Script', cursive;
-  font-size: 60px;
+  font-size: 58px;
   color: #ffb6c1;
   text-shadow: 2px 2px 15px rgba(255,192,203,0.8);
 }
@@ -53,7 +53,7 @@ header {
 
 button {
   margin-top: 15px;
-  padding: 10px 20px;
+  padding: 10px 22px;
   border-radius: 20px;
   border: none;
   font-size: 15px;
@@ -69,7 +69,7 @@ button:hover {
 .galeria {
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 30px;
   flex-wrap: wrap;
   margin: 40px auto;
 }
@@ -86,13 +86,19 @@ button:hover {
 }
 
 .poema {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.12);
   padding: 30px;
   border-radius: 20px;
   max-width: 900px;
   margin: 30px auto;
   line-height: 1.9;
   font-size: 18px;
+}
+
+footer {
+  margin: 40px;
+  font-size: 14px;
+  color: #ccc;
 }
 
 .petala {
@@ -109,19 +115,19 @@ button:hover {
 </style>
 </head>
 
-<body onclick="iniciarMusica()">
+<body>
 
 <header>
   <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
   <h2>Desde 21 de julho de 2025</h2>
   <div id="contador"></div>
 
-  <button onclick="toggleMusica()">🎵 Tocar / Pausar Música</button>
+  <button id="btnMusica">🎵 Tocar Música</button>
 </header>
 
 <section class="galeria">
-  <img class="foto" src="img/foto-gabrielle.jpg.jpg" alt="Gabrielle">
-  <img class="foto" src="img/foto-udson.jpg.jpg" alt="Udson">
+  <img class="foto" src="img/foto-gabrielle.jpg" alt="Gabrielle">
+  <img class="foto" src="img/foto-udson.jpg" alt="Udson">
 </section>
 
 <section>
@@ -137,11 +143,10 @@ button:hover {
   </div>
 </section>
 
-<footer style="margin:40px;color:#ccc;">
+<footer>
   Feito com amor 💕
 </footer>
 
-<!-- MÚSICA -->
 <audio id="musica" loop>
   <source src="audio/amor.mp3" type="audio/mpeg">
 </audio>
@@ -149,7 +154,21 @@ button:hover {
 <script>
 const inicio = new Date("2025-07-21T00:00:00");
 const musica = document.getElementById("musica");
-let musicaIniciada = false;
+const btnMusica = document.getElementById("btnMusica");
+let tocando = false;
+
+btnMusica.addEventListener("click", () => {
+  musica.volume = 0.4;
+  if (!tocando) {
+    musica.play();
+    btnMusica.innerText = "⏸️ Pausar Música";
+    tocando = true;
+  } else {
+    musica.pause();
+    btnMusica.innerText = "🎵 Tocar Música";
+    tocando = false;
+  }
+});
 
 function atualizarContador() {
   const agora = new Date();
@@ -167,19 +186,6 @@ function atualizarContador() {
 setInterval(atualizarContador, 1000);
 atualizarContador();
 
-function toggleMusica() {
-  if (musica.paused) musica.play();
-  else musica.pause();
-}
-
-function iniciarMusica() {
-  if (!musicaIniciada) {
-    musica.volume = 0.4;
-    musica.play();
-    musicaIniciada = true;
-  }
-}
-
 function criarPetala() {
   const p = document.createElement("div");
   p.className = "petala";
@@ -189,7 +195,7 @@ function criarPetala() {
   document.body.appendChild(p);
   setTimeout(()=>p.remove(),8000);
 }
-setInterval(criarPetala, 300);
+setInterval(criarPetala, 350);
 </script>
 
 </body>
