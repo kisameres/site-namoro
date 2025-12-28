@@ -2,306 +2,275 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Udson ❤️ Gabrielle</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-@keyframes gradiente {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:'Poppins',sans-serif;
+color:#f0c0c0;
+background:linear-gradient(270deg,#1a0010,#2b001b,#1f0014);
+background-size:800% 800%;
+animation:gradiente 40s ease infinite;
+overflow-x:hidden
+}
+@keyframes gradiente{
+0%,100%{background-position:0% 50%}
+50%{background-position:100% 50%}
+}
+body.dark{background:#050008;color:#d6b2b8}
+
+nav{
+position:sticky;top:0;
+background:rgba(139,0,69,.9);
+padding:15px;text-align:center;z-index:999
+}
+nav a{color:#fff;text-decoration:none;margin:0 12px;font-size:14px}
+
+header{text-align:center;padding:60px 20px}
+.nomes{
+font-family:'Dancing Script',cursive;
+font-size:60px;color:#d9a6b0
+}
+.coracao{animation:pulse 2s infinite;display:inline-block}
+@keyframes pulse{50%{transform:scale(1.2)}}
+
+button{
+margin:6px;padding:12px 24px;
+border:none;border-radius:25px;
+background:#d9a6b0;color:#fff;
+cursor:pointer
 }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #f0c0c0;
-  text-align: center;
-  background: linear-gradient(270deg, #1a0010, #2b001b, #1f0014, #2b001b);
-  background-size: 800% 800%;
-  animation: gradiente 40s ease infinite;
-  overflow-x: hidden;
+.secao{
+max-width:1200px;margin:40px auto;
+padding:40px 20px;
+background:rgba(255,255,255,.05);
+border-radius:20px
+}
+.secao h2{
+font-family:'Dancing Script',cursive;
+font-size:40px;text-align:center;
+margin-bottom:30px
 }
 
-/* 🌙 MODO ESCURO PROFUNDO */
-body.dark {
-  background: linear-gradient(270deg, #050008, #0b0012, #050008);
-  background-size: 600% 600%;
-  animation: gradiente 60s ease infinite;
-  color: #d6b2b8;
+.galeria{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;justify-items:center
+}
+.foto{
+width:300px;height:300px;
+object-fit:cover;border-radius:20px;
+box-shadow:0 0 20px rgba(255,182,193,.4)
+}
+.nome-foto{text-align:center;margin-top:10px}
+
+.carousel{position:relative;min-height:140px;text-align:center}
+.mensagem{
+font-family:'Dancing Script',cursive;
+font-size:28px;
+opacity:0;position:absolute;
+transition:1s
+}
+.mensagem.ativa{opacity:1;position:relative}
+
+.carousel-nav{
+position:absolute;top:50%;
+transform:translateY(-50%);
+background:#d9a6b0;border:none;
+width:40px;height:40px;
+border-radius:50%;color:#fff
+}
+.prev{left:0}.next{right:0}
+
+.razoes-lista{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px
+}
+.razao-card{
+padding:20px;
+background:rgba(217,166,176,.1);
+border-left:4px solid #d9a6b0;
+border-radius:12px
 }
 
-body.dark .nomes { color: #c79aa6; }
-body.dark .poema { background: rgba(255,255,255,0.03); }
-body.dark footer { color: #999; }
-body.dark button { background: #b98b95; }
-
-/* ✨ DESTAQUE DOS PETS NO MODO ESCURO */
-body.dark .gato,
-body.dark .cachorro {
-  box-shadow: 0 0 25px rgba(255,182,193,0.35);
+.modal{
+display:none;position:fixed;
+inset:0;background:rgba(0,0,0,.8);
+justify-content:center;align-items:center
+}
+.modal.ativo{display:flex}
+.modal-conteudo{
+background:#1f0014;
+padding:40px;border-radius:20px;
+max-width:600px;width:100%
+}
+.modal-fechar{
+position:absolute;top:20px;right:25px;
+font-size:28px;cursor:pointer
 }
 
-/* HEADER */
-header {
-  padding: 50px 20px 20px;
+.particula{
+position:fixed;
+animation:flutuar linear infinite;
+font-size:20px;pointer-events:none
+}
+@keyframes flutuar{
+from{transform:translateY(0)}
+to{transform:translateY(120vh);opacity:0}
 }
 
-.nomes {
-  font-family: 'Dancing Script', cursive;
-  font-size: 60px;
-  color: #d9a6b0;
-  text-shadow: 1px 1px 8px rgba(255,192,203,0.3);
-  opacity: 0;
-  transform: translateY(-30px);
-  animation: slideFade 1s forwards;
-}
-
-@keyframes slideFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.coracao {
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
-}
-
-#contador, #hora-brasil {
-  opacity: 0;
-  animation: slideFade 1.5s forwards;
-}
-#contador { animation-delay: .5s; }
-#hora-brasil { animation-delay: .8s; }
-
-/* GALERIA */
-.galeria {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-  margin: 40px auto;
-}
-
-.foto-container {
-  position: relative;
-}
-
-.foto {
-  width: 260px;
-  border-radius: 20px;
-  box-shadow: 0 0 15px rgba(255,182,193,0.2);
-  transition: transform 0.4s, box-shadow 0.4s;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeSlide 1s forwards;
-}
-
-@keyframes fadeSlide {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.foto:hover {
-  box-shadow: 0 0 25px rgba(255,182,193,0.35);
-}
-
-/* 🐱 GATO */
-.gato:hover {
-  animation: balanco 0.6s infinite alternate;
-}
-
-@keyframes balanco {
-  from { transform: rotate(-2deg) scale(1.05); }
-  to { transform: rotate(2deg) scale(1.05); }
-}
-
-/* 🐶 CACHORRO */
-.cachorro:hover {
-  animation: pulo 0.5s infinite alternate;
-}
-
-@keyframes pulo {
-  from { transform: translateY(0) scale(1.05); }
-  to { transform: translateY(-10px) scale(1.05); }
-}
-
-.nome-foto {
-  margin-top: 10px;
-  font-size: 16px;
-  color: #d9a6b0;
-}
-
-/* 💬 TOOLTIP */
-.tooltip {
-  position: absolute;
-  bottom: 110%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255,182,193,0.25);
-  color: #000;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 14px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-}
-
-.foto-container:hover .tooltip {
-  opacity: 1;
-}
-
-/* 🐾 PATINHAS CAINDO */
-.patinha {
-  position: fixed;
-  top: -20px;
-  font-size: 16px;
-  animation: cair linear infinite;
-  pointer-events: none;
-}
-
-@keyframes cair {
-  0% { transform: translateY(0) rotate(0deg); opacity: .6; }
-  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
-}
-
-/* POEMA */
-.poema {
-  background: rgba(255,255,255,0.05);
-  padding: 30px;
-  border-radius: 20px;
-  max-width: 900px;
-  margin: 30px auto;
-  line-height: 1.9;
-  font-size: 18px;
-  font-family: 'Dancing Script', cursive;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: slideFade 1s forwards;
-  animation-delay: 1s;
-}
-
-/* FOOTER */
-footer {
-  margin: 40px 0;
-  font-size: 14px;
-  color: #ccc;
-}
-
-/* BOTÕES */
-button {
-  margin: 10px 5px;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  font-size: 15px;
-  cursor: pointer;
-  background: #d9a6b0;
-}
-
-/* MOBILE */
-@media (max-width: 600px) {
-  .tooltip { display: none; }
-  .foto { width: 80%; max-width: 250px; }
-  .nomes { font-size: 40px; }
-}
+footer{text-align:center;padding:30px}
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
-  <h2>Desde 21 de julho de 2025</h2>
-  <div id="contador"></div>
-  <div id="hora-brasil"></div>
+<nav>
+<a href="#inicio">Início</a>
+<a href="#fotos">Fotos</a>
+<a href="#mensagens">Mensagens</a>
+<a href="#razoes">Razões</a>
+</nav>
 
-  <button onclick="toggleMusica()">🎵 Tocar / Pausar Música</button>
-  <button onclick="toggleDark()">🌙 Modo Escuro Profundo</button>
+<header id="inicio">
+<h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
+<h2>Desde 21 de julho de 2025</h2>
+<div id="contador"></div>
+
+<button onclick="toggleMusica()">🎵 Música</button>
+<button onclick="toggleDark()">🌙 Modo Escuro</button>
+<button onclick="abrirCarta()">💌 Carta</button>
+<button onclick="surpresa()">✨ Surpresa</button>
 </header>
 
-<section class="galeria">
-  <div class="foto-container">
-    <img class="foto" src="img/foto-gabrielle.jpg">
-    <div class="nome-foto">Gabrielle 💖</div>
-    <div class="tooltip">Minha princesa ❤️</div>
-  </div>
-
-  <div class="foto-container">
-    <img class="foto" src="img/foto-udson.jpg">
-    <div class="nome-foto">Udson 💙</div>
-    <div class="tooltip">Apaixonado por ela 😍</div>
-  </div>
-
-  <div class="foto-container">
-    <img class="foto gato" src="img/gato-gabrielle.jpg">
-    <div class="nome-foto">Gatinho dela 🐱</div>
-    <div class="tooltip">O xodó da casa 💕</div>
-  </div>
-
-  <div class="foto-container">
-    <img class="foto cachorro" src="img/cachorro-udson.jpg">
-    <div class="nome-foto">Cachorrinho dele 🐶</div>
-    <div class="tooltip">Companheiro fiel 🐾</div>
-  </div>
+<section class="secao" id="fotos">
+<h2>Nossos Amores 💕</h2>
+<div class="galeria">
+<div>
+<img src="gabrielle.jpg" class="foto">
+<div class="nome-foto">Gabrielle 💖</div>
+</div>
+<div>
+<img src="udson.jpg" class="foto">
+<div class="nome-foto">Udson 💙</div>
+</div>
+</div>
 </section>
 
-<div class="poema">
-Nosso amor não se mede em dias,<br>
-mas em cada segundo escolhido juntos.<br><br>
-<strong>Sempre nós dois ❤️</strong>
+<section class="secao" id="mensagens">
+<h2>Mensagens do Coração 💌</h2>
+<div class="carousel">
+<button class="carousel-nav prev" onclick="mudarMensagem(-1)">←</button>
+<div id="mensagens-container"></div>
+<button class="carousel-nav next" onclick="mudarMensagem(1)">→</button>
+</div>
+</section>
+
+<section class="secao" id="razoes">
+<h2>Razões Por Que Te Amo 💖</h2>
+<div class="razoes-lista" id="razoes-lista"></div>
+</section>
+
+<div class="modal" id="modal-carta">
+<div class="modal-conteudo">
+<span class="modal-fechar" onclick="fecharCarta()">×</span>
+<p style="font-family:'Dancing Script';font-size:22px">
+Minha amada Gabrielle,<br><br>
+Te amar é a melhor parte da minha vida.
+Obrigado por existir. ❤️<br><br>
+— Udson
+</p>
+</div>
 </div>
 
-<footer>Feito com amor 💕</footer>
+<footer>
+Feito com amor 💕<br>Udson & Gabrielle ♾️
+</footer>
 
-<!-- 🎵 MP3 MANTIDO -->
-<audio id="musica" loop autoplay>
-  <source src="audio/amor.mp3.mp3" type="audio/mpeg">
-</audio>
+<audio id="musica" src="mp3.mp3" loop></audio>
 
 <script>
-const inicio = new Date("2025-07-21T00:00:00");
-const musica = document.getElementById("musica");
+const inicio=new Date("2025-07-21T00:00:00");
+let indiceMensagem=0;
+let musica=document.getElementById("musica");
+let tocando=false;
 
-function atualizar() {
-  const agora = new Date();
-  let diff = Math.floor((agora - inicio)/1000);
-  const s = diff%60; diff=Math.floor(diff/60);
-  const m = diff%60; diff=Math.floor(diff/60);
-  const h = diff%24;
-  const d = Math.floor(diff/24);
-  contador.innerHTML = `⏳ ${d} dias ${h}h ${m}m ${s}s juntos`;
-}
-setInterval(atualizar,1000);
+const mensagens=[
+"Você é meu lar ❤️",
+"Meu sorriso tem seu nome 😊",
+"Nosso amor é infinito ♾️",
+"Com você tudo faz sentido 💕"
+];
 
-function toggleMusica() {
-  musica.paused ? musica.play() : musica.pause();
+const razoes=[
+"Seu sorriso","Seu abraço","Seu carinho","Você é minha paz"
+];
+
+function atualizar(){
+let agora=new Date();
+let diff=Math.floor((agora-inicio)/1000);
+let d=Math.floor(diff/86400);
+document.getElementById("contador").innerText=`${d} dias juntos ❤️`;
+}
+setInterval(atualizar,1000);atualizar();
+
+function carregarMensagens(){
+let c=document.getElementById("mensagens-container");
+mensagens.forEach((m,i)=>{
+let d=document.createElement("div");
+d.className="mensagem"+(i==0?" ativa":"");
+d.innerText=m;
+c.appendChild(d);
+});
+}
+function mudarMensagem(dir){
+let m=document.querySelectorAll(".mensagem");
+m[indiceMensagem].classList.remove("ativa");
+indiceMensagem=(indiceMensagem+dir+mensagens.length)%mensagens.length;
+m[indiceMensagem].classList.add("ativa");
 }
 
-function toggleDark() {
-  document.body.classList.toggle("dark");
-  localStorage.setItem("modo-escuro", document.body.classList.contains("dark"));
-}
-if (localStorage.getItem("modo-escuro")==="true") {
-  document.body.classList.add("dark");
+function carregarRazoes(){
+let l=document.getElementById("razoes-lista");
+razoes.forEach((r,i)=>{
+let d=document.createElement("div");
+d.className="razao-card";
+d.innerText=(i+1)+". "+r;
+l.appendChild(d);
+});
 }
 
-/* 🐾 CRIAR PATINHAS */
-function criarPatinha() {
-  const p = document.createElement("div");
-  p.className = "patinha";
-  p.innerText = "🐾";
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.animationDuration = (6 + Math.random() * 4) + "s";
-  document.body.appendChild(p);
-  setTimeout(() => p.remove(), 10000);
+function toggleDark(){document.body.classList.toggle("dark")}
+function abrirCarta(){modal-carta.classList.add("ativo")}
+function fecharCarta(){modal-carta.classList.remove("ativo")}
+
+function toggleMusica(){
+tocando=!tocando;
+tocando?musica.play():musica.pause();
 }
-setInterval(criarPatinha, 1200);
+
+function criarParticula(){
+let p=document.createElement("div");
+p.className="particula";
+p.innerText=["❤️","💕","✨"][Math.floor(Math.random()*3)];
+p.style.left=Math.random()*100+"vw";
+p.style.animationDuration="5s";
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),5000);
+}
+function surpresa(){
+let i=setInterval(criarParticula,300);
+setTimeout(()=>clearInterval(i),5000);
+}
+
+carregarMensagens();
+carregarRazoes();
 </script>
 
 </body>
