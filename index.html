@@ -5,8 +5,7 @@ import {
   TrendingUp,
   Calendar,
   Play,
-  Pause,
-  Trophy
+  Pause
 } from "lucide-react";
 
 export default function RobloxTracker() {
@@ -15,9 +14,7 @@ export default function RobloxTracker() {
   const [currentSession, setCurrentSession] = useState(null);
   const [gameName, setGameName] = useState("");
 
-  /* =======================
-     LOAD / SAVE LOCALSTORAGE
-  ======================== */
+  /* ===== LOAD / SAVE ===== */
   useEffect(() => {
     const saved = localStorage.getItem("robloxSessions");
     if (saved) setSessions(JSON.parse(saved));
@@ -27,9 +24,7 @@ export default function RobloxTracker() {
     localStorage.setItem("robloxSessions", JSON.stringify(sessions));
   }, [sessions]);
 
-  /* =======================
-     TIMER DA SESSÃO
-  ======================== */
+  /* ===== TIMER ===== */
   useEffect(() => {
     let interval;
     if (isPlaying && currentSession) {
@@ -43,26 +38,22 @@ export default function RobloxTracker() {
     return () => clearInterval(interval);
   }, [isPlaying, currentSession]);
 
-  /* =======================
-     AUTO-PAUSE AO SAIR DA ABA
-  ======================== */
+  /* ===== AUTO PAUSE ===== */
   useEffect(() => {
-    const onHide = () => {
+    const handleVisibility = () => {
       if (document.hidden && isPlaying) stopSession();
     };
-    document.addEventListener("visibilitychange", onHide);
+    document.addEventListener("visibilitychange", handleVisibility);
     return () =>
-      document.removeEventListener("visibilitychange", onHide);
+      document.removeEventListener("visibilitychange", handleVisibility);
   }, [isPlaying]);
 
-  /* =======================
-     CONTROLES
-  ======================== */
+  /* ===== CONTROLES ===== */
   const startSession = () => {
     if (!gameName.trim()) return;
     setCurrentSession({
       id: Date.now(),
-      game: gameName.trim(),
+      game: gameName,
       startTime: Date.now(),
       duration: 0,
       date: new Date().toLocaleDateString("pt-BR")
@@ -78,9 +69,7 @@ export default function RobloxTracker() {
     setGameName("");
   };
 
-  /* =======================
-     UTILIDADES
-  ======================== */
+  /* ===== UTILS ===== */
   const formatTime = ms => {
     const s = Math.floor(ms / 1000);
     const m = Math.floor(s / 60);
@@ -118,9 +107,7 @@ export default function RobloxTracker() {
       .sort((a, b) => b.hours - a.hours);
   };
 
-  /* =======================
-     UI
-  ======================== */
+  /* ===== UI ===== */
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8 text-white">
       <div className="max-w-6xl mx-auto">
@@ -197,7 +184,9 @@ export default function RobloxTracker() {
               <div key={s.id} className="border-b border-white/10 py-2">
                 <strong>{s.game}</strong>
                 <div className="text-sm opacity-70">{s.date}</div>
-                <div className="text-purple-400">{formatTime(s.duration)}</div>
+                <div className="text-purple-400">
+                  {formatTime(s.duration)}
+                </div>
               </div>
             ))
           )}
@@ -208,7 +197,7 @@ export default function RobloxTracker() {
   );
 }
 
-/* COMPONENTES AUX */
+/* ===== COMPONENTES AUX ===== */
 const Card = ({ title, children }) => (
   <div className="bg-white/10 backdrop-blur rounded-xl p-6 border border-white/20 mb-8">
     <h2 className="text-2xl font-bold mb-4">{title}</h2>
