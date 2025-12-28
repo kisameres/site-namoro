@@ -1,216 +1,308 @@
-import React, { useState, useEffect } from "react";
-import {
-  Clock,
-  Gamepad2,
-  TrendingUp,
-  Calendar,
-  Play,
-  Pause
-} from "lucide-react";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Udson ❤️ Gabrielle</title>
 
-export default function RobloxTracker() {
-  const [sessions, setSessions] = useState([]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSession, setCurrentSession] = useState(null);
-  const [gameName, setGameName] = useState("");
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
-  /* ===== LOAD / SAVE ===== */
-  useEffect(() => {
-    const saved = localStorage.getItem("robloxSessions");
-    if (saved) setSessions(JSON.parse(saved));
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("robloxSessions", JSON.stringify(sessions));
-  }, [sessions]);
-
-  /* ===== TIMER ===== */
-  useEffect(() => {
-    let interval;
-    if (isPlaying && currentSession) {
-      interval = setInterval(() => {
-        setCurrentSession(prev => ({
-          ...prev,
-          duration: Date.now() - prev.startTime
-        }));
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, currentSession]);
-
-  /* ===== AUTO PAUSE ===== */
-  useEffect(() => {
-    const handleVisibility = () => {
-      if (document.hidden && isPlaying) stopSession();
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () =>
-      document.removeEventListener("visibilitychange", handleVisibility);
-  }, [isPlaying]);
-
-  /* ===== CONTROLES ===== */
-  const startSession = () => {
-    if (!gameName.trim()) return;
-    setCurrentSession({
-      id: Date.now(),
-      game: gameName,
-      startTime: Date.now(),
-      duration: 0,
-      date: new Date().toLocaleDateString("pt-BR")
-    });
-    setIsPlaying(true);
-  };
-
-  const stopSession = () => {
-    if (!currentSession) return;
-    setSessions([currentSession, ...sessions]);
-    setCurrentSession(null);
-    setIsPlaying(false);
-    setGameName("");
-  };
-
-  /* ===== UTILS ===== */
-  const formatTime = ms => {
-    const s = Math.floor(ms / 1000);
-    const m = Math.floor(s / 60);
-    const h = Math.floor(m / 60);
-    return `${h}h ${m % 60}m ${s % 60}s`;
-  };
-
-  const totalHours = (
-    sessions.reduce((a, s) => a + s.duration, 0) /
-    (1000 * 60 * 60)
-  ).toFixed(1);
-
-  const last2Weeks = (
-    sessions
-      .filter(s => {
-        const d = new Date(s.date.split("/").reverse().join("-"));
-        const limit = new Date();
-        limit.setDate(limit.getDate() - 14);
-        return d >= limit;
-      })
-      .reduce((a, s) => a + s.duration, 0) /
-    (1000 * 60 * 60)
-  ).toFixed(1);
-
-  const hoursByGame = () => {
-    const map = {};
-    sessions.forEach(s => {
-      map[s.game] = (map[s.game] || 0) + s.duration;
-    });
-    return Object.entries(map)
-      .map(([game, d]) => ({
-        game,
-        hours: (d / (1000 * 60 * 60)).toFixed(1)
-      }))
-      .sort((a, b) => b.hours - a.hours);
-  };
-
-  /* ===== UI ===== */
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8 text-white">
-      <div className="max-w-6xl mx-auto">
-
-        {/* HEADER */}
-        <div className="text-center mb-10">
-          <div className="flex justify-center items-center gap-3 mb-4">
-            <Gamepad2 className="w-12 h-12 text-purple-400" />
-            <h1 className="text-5xl font-bold">Roblox Tracker</h1>
-          </div>
-          <p className="text-purple-300">
-            Controle suas horas como na Steam
-          </p>
-        </div>
-
-        {/* STATS */}
-        <div className="grid md:grid-cols-3 gap-6 mb-10">
-          <Stat icon={<Clock />} title="Total" value={`${totalHours}h`} />
-          <Stat icon={<TrendingUp />} title="Últimas 2 semanas" value={`${last2Weeks}h`} />
-          <Stat icon={<Calendar />} title="Sessões" value={sessions.length} />
-        </div>
-
-        {/* CONTROLE */}
-        <Card title="Nova Sessão">
-          {!isPlaying ? (
-            <div className="flex gap-4">
-              <input
-                value={gameName}
-                onChange={e => setGameName(e.target.value)}
-                placeholder="Nome do jogo"
-                className="flex-1 p-3 rounded bg-white/5 border border-white/20"
-              />
-              <button
-                onClick={startSession}
-                className="bg-green-500 px-6 rounded flex gap-2 items-center"
-              >
-                <Play /> Iniciar
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <strong>{currentSession.game}</strong>
-                <span className="text-green-400 text-xl">
-                  {formatTime(currentSession.duration)}
-                </span>
-              </div>
-              <button
-                onClick={stopSession}
-                className="w-full bg-red-500 p-3 rounded flex justify-center gap-2"
-              >
-                <Pause /> Parar
-              </button>
-            </div>
-          )}
-        </Card>
-
-        {/* RANKING */}
-        <Card title="🏆 Jogos Mais Jogados">
-          {hoursByGame().map((g, i) => (
-            <div key={g.game} className="flex justify-between border-b border-white/10 py-2">
-              <span>{i + 1}. {g.game}</span>
-              <span className="text-purple-400">{g.hours}h</span>
-            </div>
-          ))}
-        </Card>
-
-        {/* HISTÓRICO */}
-        <Card title="Histórico de Sessões">
-          {sessions.length === 0 ? (
-            <p className="opacity-50 text-center">Nenhuma sessão</p>
-          ) : (
-            sessions.map(s => (
-              <div key={s.id} className="border-b border-white/10 py-2">
-                <strong>{s.game}</strong>
-                <div className="text-sm opacity-70">{s.date}</div>
-                <div className="text-purple-400">
-                  {formatTime(s.duration)}
-                </div>
-              </div>
-            ))
-          )}
-        </Card>
-
-      </div>
-    </div>
-  );
+<style>
+@keyframes gradiente {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* ===== COMPONENTES AUX ===== */
-const Card = ({ title, children }) => (
-  <div className="bg-white/10 backdrop-blur rounded-xl p-6 border border-white/20 mb-8">
-    <h2 className="text-2xl font-bold mb-4">{title}</h2>
-    {children}
-  </div>
-);
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #f0c0c0;
+  text-align: center;
+  background: linear-gradient(270deg, #1a0010, #2b001b, #1f0014, #2b001b);
+  background-size: 800% 800%;
+  animation: gradiente 40s ease infinite;
+  overflow-x: hidden;
+}
 
-const Stat = ({ icon, title, value }) => (
-  <div className="bg-white/10 backdrop-blur rounded-xl p-6 border border-white/20">
-    <div className="flex gap-2 items-center mb-2">
-      {icon}
-      <span>{title}</span>
-    </div>
-    <div className="text-4xl font-bold text-purple-400">{value}</div>
+/* 🌙 MODO ESCURO PROFUNDO */
+body.dark {
+  background: linear-gradient(270deg, #050008, #0b0012, #050008);
+  background-size: 600% 600%;
+  animation: gradiente 60s ease infinite;
+  color: #d6b2b8;
+}
+
+body.dark .nomes { color: #c79aa6; }
+body.dark .poema { background: rgba(255,255,255,0.03); }
+body.dark footer { color: #999; }
+body.dark button { background: #b98b95; }
+
+/* ✨ DESTAQUE DOS PETS NO MODO ESCURO */
+body.dark .gato,
+body.dark .cachorro {
+  box-shadow: 0 0 25px rgba(255,182,193,0.35);
+}
+
+/* HEADER */
+header {
+  padding: 50px 20px 20px;
+}
+
+.nomes {
+  font-family: 'Dancing Script', cursive;
+  font-size: 60px;
+  color: #d9a6b0;
+  text-shadow: 1px 1px 8px rgba(255,192,203,0.3);
+  opacity: 0;
+  transform: translateY(-30px);
+  animation: slideFade 1s forwards;
+}
+
+@keyframes slideFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.coracao {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+#contador, #hora-brasil {
+  opacity: 0;
+  animation: slideFade 1.5s forwards;
+}
+#contador { animation-delay: .5s; }
+#hora-brasil { animation-delay: .8s; }
+
+/* GALERIA */
+.galeria {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin: 40px auto;
+}
+
+.foto-container {
+  position: relative;
+}
+
+.foto {
+  width: 260px;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(255,182,193,0.2);
+  transition: transform 0.4s, box-shadow 0.4s;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 1s forwards;
+}
+
+@keyframes fadeSlide {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.foto:hover {
+  box-shadow: 0 0 25px rgba(255,182,193,0.35);
+}
+
+/* 🐱 GATO */
+.gato:hover {
+  animation: balanco 0.6s infinite alternate;
+}
+
+@keyframes balanco {
+  from { transform: rotate(-2deg) scale(1.05); }
+  to { transform: rotate(2deg) scale(1.05); }
+}
+
+/* 🐶 CACHORRO */
+.cachorro:hover {
+  animation: pulo 0.5s infinite alternate;
+}
+
+@keyframes pulo {
+  from { transform: translateY(0) scale(1.05); }
+  to { transform: translateY(-10px) scale(1.05); }
+}
+
+.nome-foto {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #d9a6b0;
+}
+
+/* 💬 TOOLTIP */
+.tooltip {
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,182,193,0.25);
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.foto-container:hover .tooltip {
+  opacity: 1;
+}
+
+/* 🐾 PATINHAS CAINDO */
+.patinha {
+  position: fixed;
+  top: -20px;
+  font-size: 16px;
+  animation: cair linear infinite;
+  pointer-events: none;
+}
+
+@keyframes cair {
+  0% { transform: translateY(0) rotate(0deg); opacity: .6; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
+
+/* POEMA */
+.poema {
+  background: rgba(255,255,255,0.05);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 900px;
+  margin: 30px auto;
+  line-height: 1.9;
+  font-size: 18px;
+  font-family: 'Dancing Script', cursive;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideFade 1s forwards;
+  animation-delay: 1s;
+}
+
+/* FOOTER */
+footer {
+  margin: 40px 0;
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* BOTÕES */
+button {
+  margin: 10px 5px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  background: #d9a6b0;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .tooltip { display: none; }
+  .foto { width: 80%; max-width: 250px; }
+  .nomes { font-size: 40px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1 class="nomes">Udson <span class="coracao">❤️</span> Gabrielle</h1>
+  <h2>Desde 21 de julho de 2025</h2>
+  <div id="contador"></div>
+  <div id="hora-brasil"></div>
+
+  <button onclick="toggleMusica()">🎵 Tocar / Pausar Música</button>
+  <button onclick="toggleDark()">🌙 Modo Escuro Profundo</button>
+</header>
+
+<section class="galeria">
+  <div class="foto-container">
+    <img class="foto" src="img/foto-gabrielle.jpg">
+    <div class="nome-foto">Gabrielle 💖</div>
+    <div class="tooltip">Minha princesa ❤️</div>
   </div>
-);
+
+  <div class="foto-container">
+    <img class="foto" src="img/foto-udson.jpg">
+    <div class="nome-foto">Udson 💙</div>
+    <div class="tooltip">Apaixonado por ela 😍</div>
+  </div>
+
+  <div class="foto-container">
+    <img class="foto gato" src="img/gato-gabrielle.jpg">
+    <div class="nome-foto">Gatinho dela 🐱</div>
+    <div class="tooltip">O xodó da casa 💕</div>
+  </div>
+
+  <div class="foto-container">
+    <img class="foto cachorro" src="img/cachorro-udson.jpg">
+    <div class="nome-foto">Cachorrinho dele 🐶</div>
+    <div class="tooltip">Companheiro fiel 🐾</div>
+  </div>
+</section>
+
+<div class="poema">
+Nosso amor não se mede em dias,<br>
+mas em cada segundo escolhido juntos.<br><br>
+<strong>Sempre nós dois ❤️</strong>
+</div>
+
+<footer>Feito com amor 💕</footer>
+
+<!-- 🎵 MP3 MANTIDO -->
+<audio id="musica" loop autoplay>
+  <source src="audio/amor.mp3.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const inicio = new Date("2025-07-21T00:00:00");
+const musica = document.getElementById("musica");
+
+function atualizar() {
+  const agora = new Date();
+  let diff = Math.floor((agora - inicio)/1000);
+  const s = diff%60; diff=Math.floor(diff/60);
+  const m = diff%60; diff=Math.floor(diff/60);
+  const h = diff%24;
+  const d = Math.floor(diff/24);
+  contador.innerHTML = `⏳ ${d} dias ${h}h ${m}m ${s}s juntos`;
+}
+setInterval(atualizar,1000);
+
+function toggleMusica() {
+  musica.paused ? musica.play() : musica.pause();
+}
+
+function toggleDark() {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("modo-escuro", document.body.classList.contains("dark"));
+}
+if (localStorage.getItem("modo-escuro")==="true") {
+  document.body.classList.add("dark");
+}
+
+/* 🐾 CRIAR PATINHAS */
+function criarPatinha() {
+  const p = document.createElement("div");
+  p.className = "patinha";
+  p.innerText = "🐾";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (6 + Math.random() * 4) + "s";
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 10000);
+}
+setInterval(criarPatinha, 1200);
+</script>
+
+</body>
+</html>
