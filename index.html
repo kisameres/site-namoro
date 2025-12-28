@@ -1,122 +1,203 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<title>Roblox Time Tracker</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0f1a;
-  color: #fff;
-}
+import React, { useState, useEffect } from 'react';
+import { Clock, Gamepad2, TrendingUp, Calendar, Play, Pause } from 'lucide-react';
 
-.container {
-  max-width: 600px;
-  margin: 50px auto;
-  background: #1c1c2e;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 0 40px rgba(0,0,0,.6);
-}
+export default function RobloxTracker() {
+  const [sessions, setSessions] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSession, setCurrentSession] = useState(null);
+  const [gameName, setGameName] = useState('');
 
-h1 {
-  text-align: center;
-}
+  useEffect(() => {
+    const saved = localStorage.getItem('robloxSessions');
+    if (saved) {
+      setSessions(JSON.parse(saved));
+    }
+  }, []);
 
-input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  margin-top: 15px;
-  font-size: 16px;
-}
+  useEffect(() => {
+    if (sessions.length > 0) {
+      localStorage.setItem('robloxSessions', JSON.stringify(sessions));
+    }
+  }, [sessions]);
 
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg,#667eea,#764ba2);
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
+  useEffect(() => {
+    let interval;
+    if (isPlaying && currentSession) {
+      interval = setInterval(() => {
+        setCurrentSession(prev => ({
+          ...prev,
+          duration: Date.now() - prev.startTime
+        }));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, currentSession]);
 
-.profile {
-  text-align: center;
-  margin-top: 30px;
-}
+  const startSession = () => {
+    if (!gameName.trim()) return;
+    
+    const newSession = {
+      id: Date.now(),
+      game: gameName,
+      startTime: Date.now(),
+      duration: 0,
+      date: new Date().toLocaleDateString('pt-BR')
+    };
+    
+    setCurrentSession(newSession);
+    setIsPlaying(true);
+  };
 
-.profile img {
-  width: 120px;
-  border-radius: 50%;
-}
+  const stopSession = () => {
+    if (currentSession) {
+      setSessions([currentSession, ...sessions]);
+      setCurrentSession(null);
+      setIsPlaying(false);
+      setGameName('');
+    }
+  };
 
-.card {
-  background: #26263d;
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 20px;
-}
-</style>
-</head>
-<body>
+  const formatTime = (ms) => {
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    
+    return `${hours}h ${minutes % 60}m ${seconds % 60}s`;
+  };
 
-<div class="container">
-  <h1>🎮 Roblox Time Tracker</h1>
+  const getTotalHours = () => {
+    const total = sessions.reduce((acc, session) => acc + session.duration, 0);
+    return (total / (1000 * 60 * 60)).toFixed(1);
+  };
 
-  <input id="username" placeholder="Digite o username Roblox">
-  <button onclick="buscar()">Buscar</button>
+  const getLast2Weeks = () => {
+    const total = sessions
+      .filter(s => {
+        const sessionDate = new Date(s.date.split('/').reverse().join('-'));
+        const twoWeeksAgo = new Date();
+        twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+        return sessionDate >= twoWeeksAgo;
+      })
+      .reduce((acc, session) => acc + session.duration, 0);
+    return (total / (1000 * 60 * 60)).toFixed(1);
+  };
 
-  <div id="resultado"></div>
-</div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Gamepad2 className="w-12 h-12 text-purple-400" />
+            <h1 className="text-5xl font-bold text-white">Roblox Tracker</h1>
+          </div>
+          <p className="text-purple-200">Rastreie suas horas de jogo como na Steam</p>
+        </div>
 
-<script>
-async function buscar() {
-  const user = document.getElementById("username").value.trim();
-  if (!user) return alert("Digite um username");
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+            <div className="flex items-center gap-3 mb-2">
+              <Clock className="w-6 h-6 text-blue-400" />
+              <h3 className="text-white font-semibold">Total de Horas</h3>
+            </div>
+            <p className="text-4xl font-bold text-blue-400">{getTotalHours()}h</p>
+          </div>
 
-  const res = await fetch(`https://users.roblox.com/v1/users/search?keyword=${user}&limit=1`);
-  const data = await res.json();
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+            <div className="flex items-center gap-3 mb-2">
+              <TrendingUp className="w-6 h-6 text-green-400" />
+              <h3 className="text-white font-semibold">Últimas 2 Semanas</h3>
+            </div>
+            <p className="text-4xl font-bold text-green-400">{getLast2Weeks()}h</p>
+          </div>
 
-  if (!data.data.length) return alert("Usuário não encontrado");
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+            <div className="flex items-center gap-3 mb-2">
+              <Calendar className="w-6 h-6 text-purple-400" />
+              <h3 className="text-white font-semibold">Sessões</h3>
+            </div>
+            <p className="text-4xl font-bold text-purple-400">{sessions.length}</p>
+          </div>
+        </div>
 
-  const u = data.data[0];
+        {/* Session Control */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4">Nova Sessão</h2>
+          
+          {!isPlaying ? (
+            <div className="flex gap-4">
+              <input
+                type="text"
+                value={gameName}
+                onChange={(e) => setGameName(e.target.value)}
+                placeholder="Nome do jogo (ex: Brookhaven, Adopt Me...)"
+                className="flex-1 px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-purple-400"
+              />
+              <button
+                onClick={startSession}
+                disabled={!gameName.trim()}
+                className="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white rounded-lg font-semibold flex items-center gap-2 transition"
+              >
+                <Play className="w-5 h-5" />
+                Iniciar
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white/70 text-sm mb-1">Jogando agora:</p>
+                  <p className="text-2xl font-bold text-white">{currentSession?.game}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-white/70 text-sm mb-1">Tempo:</p>
+                  <p className="text-3xl font-bold text-green-400">
+                    {formatTime(currentSession?.duration || 0)}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={stopSession}
+                className="w-full px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold flex items-center justify-center gap-2 transition"
+              >
+                <Pause className="w-5 h-5" />
+                Parar Sessão
+              </button>
+            </div>
+          )}
+        </div>
 
-  const avatar = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${u.id}&size=150x150&format=Png`);
-  const avatarData = await avatar.json();
-
-  const criado = new Date(u.created);
-  const anos = Math.max(1, (Date.now() - criado) / (1000*60*60*24*365));
-
-  // estimativa média
-  const horasEstimadas = Math.floor(anos * 365 * 2.5);
-
-  document.getElementById("resultado").innerHTML = `
-    <div class="profile">
-      <img src="${avatarData.data[0].imageUrl}">
-      <h2>${u.name}</h2>
-      <p>Conta criada em ${criado.toLocaleDateString()}</p>
+        {/* Sessions History */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
+          <h2 className="text-2xl font-bold text-white mb-4">Histórico de Sessões</h2>
+          
+          {sessions.length === 0 ? (
+            <p className="text-white/50 text-center py-8">Nenhuma sessão registrada ainda</p>
+          ) : (
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              {sessions.map((session) => (
+                <div
+                  key={session.id}
+                  className="bg-white/5 rounded-lg p-4 border border-white/10 hover:bg-white/10 transition"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-white font-semibold text-lg">{session.game}</p>
+                      <p className="text-white/60 text-sm">{session.date}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-purple-400 font-bold text-xl">
+                        {formatTime(session.duration)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-
-    <div class="card">
-      <h3>⏱ Tempo estimado no Roblox</h3>
-      <p><strong>${horasEstimadas.toLocaleString()} horas</strong></p>
-      <p>${Math.floor(horasEstimadas/24)} dias jogados</p>
-    </div>
-
-    <div class="card">
-      <h3>⚠️ Aviso</h3>
-      <p>O Roblox não libera tempo real jogado por usuário.<br>
-      Este valor é uma <strong>estimativa baseada na idade da conta</strong>.</p>
-    </div>
-  `;
+  );
 }
-</script>
-
-</body>
-</html>
