@@ -2,469 +2,119 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<title>Roblox Time Tracker</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Horas Roblox</title>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  padding: 20px;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0f1a;
+  color: #fff;
 }
 
 .container {
-  max-width: 700px;
-  margin: 0 auto;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  margin: 50px auto;
+  background: #1c1c2e;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(0,0,0,.6);
 }
 
 h1 {
   text-align: center;
-  color: #333;
-  margin-bottom: 10px;
-  font-size: 32px;
 }
 
-.subtitle {
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.profile {
   text-align: center;
-  color: #666;
-  margin-bottom: 30px;
-  font-size: 14px;
+  margin-top: 30px;
 }
 
-.form-section {
-  background: #f8f9fa;
-  padding: 25px;
-  border-radius: 15px;
-  margin-bottom: 30px;
+.profile img {
+  width: 120px;
+  border-radius: 50%;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  color: #333;
-  font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 15px;
-}
-
-input, select {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  font-size: 15px;
-  transition: border 0.3s;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.games-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.game-item {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.game-item input {
-  flex: 1;
-}
-
-.game-item button {
-  padding: 8px 15px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.add-game-btn {
-  width: 100%;
-  padding: 12px;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: transform 0.2s;
-}
-
-.add-game-btn:hover {
-  transform: translateY(-2px);
-}
-
-.calculate-btn {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.calculate-btn:hover {
-  transform: translateY(-2px);
-}
-
-.results {
-  display: none;
-  animation: fadeIn 0.5s;
-}
-
-.results.show {
-  display: block;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.stats-header {
-  text-align: center;
-  padding: 25px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 15px;
-  margin-bottom: 25px;
-}
-
-.stats-header h2 {
-  font-size: 28px;
-  margin-bottom: 5px;
-}
-
-.stats-header p {
-  opacity: 0.9;
-  font-size: 14px;
-}
-
-.total-hours {
-  font-size: 48px;
-  font-weight: bold;
-  margin: 15px 0;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-  margin-bottom: 25px;
-}
-
-.stat-card {
-  background: #f8f9fa;
+.card {
+  background: #26263d;
   padding: 20px;
   border-radius: 12px;
-  text-align: center;
-  border: 2px solid #e9ecef;
-}
-
-.stat-number {
-  font-size: 28px;
-  font-weight: bold;
-  color: #667eea;
-  margin-bottom: 5px;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: #666;
-}
-
-.games-breakdown {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 12px;
-}
-
-.games-breakdown h3 {
-  color: #333;
-  margin-bottom: 15px;
-  font-size: 18px;
-}
-
-.game-bar {
-  margin-bottom: 15px;
-}
-
-.game-bar-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-  font-size: 14px;
-}
-
-.game-name {
-  color: #333;
-  font-weight: 600;
-}
-
-.game-hours {
-  color: #667eea;
-  font-weight: bold;
-}
-
-.progress-bar {
-  height: 25px;
-  background: #e9ecef;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-  transition: width 0.5s ease;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 10px;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.info-box {
-  background: #fff3cd;
-  border-left: 4px solid #ffc107;
-  padding: 15px;
-  border-radius: 8px;
   margin-top: 20px;
-  font-size: 13px;
-  color: #856404;
-  line-height: 1.6;
-}
-
-@media (max-width: 600px) {
-  .container {
-    padding: 20px;
-  }
-  
-  h1 {
-    font-size: 24px;
-  }
-  
-  .total-hours {
-    font-size: 36px;
-  }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>🎮 Calculadora de Horas Roblox</h1>
-  <p class="subtitle">Registre seus jogos e acompanhe seu tempo total!</p>
-  
-  <div class="form-section">
-    <div class="form-group">
-      <label>👤 Seu Nome de Usuário</label>
-      <input type="text" id="username" placeholder="Digite seu username">
-    </div>
-    
-    <div class="form-group">
-      <label>📅 Há quanto tempo você joga Roblox?</label>
-      <select id="accountAge">
-        <option value="">Selecione...</option>
-        <option value="1">Menos de 1 ano</option>
-        <option value="2">1-2 anos</option>
-        <option value="3">2-3 anos</option>
-        <option value="4">3-4 anos</option>
-        <option value="5">4-5 anos</option>
-        <option value="6">5+ anos</option>
-      </select>
-    </div>
-    
-    <div class="form-group">
-      <label>🎯 Seus Jogos Favoritos e Horas Jogadas</label>
-      <div class="games-list" id="gamesList">
-        <div class="game-item">
-          <input type="text" placeholder="Nome do jogo" class="game-name-input">
-          <input type="number" placeholder="Horas" class="game-hours-input" min="0">
-        </div>
-      </div>
-      <button class="add-game-btn" onclick="addGame()">➕ Adicionar Mais Jogo</button>
-    </div>
-    
-    <button class="calculate-btn" onclick="calcular()">📊 Calcular Minhas Estatísticas</button>
-  </div>
-  
-  <div class="results" id="results">
-    <div class="stats-header">
-      <h2 id="resultUsername">-</h2>
-      <div class="total-hours" id="totalHours">0h</div>
-      <p>Tempo Total Jogado no Roblox</p>
-    </div>
-    
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-number" id="totalDays">0</div>
-        <div class="stat-label">Dias Jogados</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-number" id="avgPerDay">0h</div>
-        <div class="stat-label">Média por Dia</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-number" id="gamesPlayed">0</div>
-        <div class="stat-label">Jogos Registrados</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-number" id="dedication">-</div>
-        <div class="stat-label">Nível de Dedicação</div>
-      </div>
-    </div>
-    
-    <div class="games-breakdown">
-      <h3>📈 Distribuição por Jogo</h3>
-      <div id="gamesBreakdown"></div>
-    </div>
-    
-    <div class="info-box">
-      💡 <strong>Dica:</strong> Para encontrar o tempo exato que você jogou cada jogo no Roblox, acesse a página do jogo, clique em "..." e veja suas estatísticas pessoais!
-    </div>
-  </div>
+  <h1>🎮 Roblox Time Tracker</h1>
+
+  <input id="username" placeholder="Digite o username Roblox">
+  <button onclick="buscar()">Buscar</button>
+
+  <div id="resultado"></div>
 </div>
 
 <script>
-let gameCount = 1;
+async function buscar() {
+  const user = document.getElementById("username").value.trim();
+  if (!user) return alert("Digite um username");
 
-function addGame() {
-  gameCount++;
-  const gamesList = document.getElementById('gamesList');
-  const gameItem = document.createElement('div');
-  gameItem.className = 'game-item';
-  gameItem.innerHTML = `
-    <input type="text" placeholder="Nome do jogo" class="game-name-input">
-    <input type="number" placeholder="Horas" class="game-hours-input" min="0">
-    <button onclick="removeGame(this)">✕</button>
+  const res = await fetch(`https://users.roblox.com/v1/users/search?keyword=${user}&limit=1`);
+  const data = await res.json();
+
+  if (!data.data.length) return alert("Usuário não encontrado");
+
+  const u = data.data[0];
+
+  const avatar = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${u.id}&size=150x150&format=Png`);
+  const avatarData = await avatar.json();
+
+  const criado = new Date(u.created);
+  const anos = Math.max(1, (Date.now() - criado) / (1000*60*60*24*365));
+
+  // estimativa média
+  const horasEstimadas = Math.floor(anos * 365 * 2.5);
+
+  document.getElementById("resultado").innerHTML = `
+    <div class="profile">
+      <img src="${avatarData.data[0].imageUrl}">
+      <h2>${u.name}</h2>
+      <p>Conta criada em ${criado.toLocaleDateString()}</p>
+    </div>
+
+    <div class="card">
+      <h3>⏱ Tempo estimado no Roblox</h3>
+      <p><strong>${horasEstimadas.toLocaleString()} horas</strong></p>
+      <p>${Math.floor(horasEstimadas/24)} dias jogados</p>
+    </div>
+
+    <div class="card">
+      <h3>⚠️ Aviso</h3>
+      <p>O Roblox não libera tempo real jogado por usuário.<br>
+      Este valor é uma <strong>estimativa baseada na idade da conta</strong>.</p>
+    </div>
   `;
-  gamesList.appendChild(gameItem);
-}
-
-function removeGame(btn) {
-  btn.parentElement.remove();
-  gameCount--;
-}
-
-function calcular() {
-  const username = document.getElementById('username').value.trim();
-  const accountAge = document.getElementById('accountAge').value;
-  
-  if (!username) {
-    alert('Por favor, digite seu nome de usuário!');
-    return;
-  }
-  
-  if (!accountAge) {
-    alert('Por favor, selecione há quanto tempo você joga!');
-    return;
-  }
-  
-  // Coletar dados dos jogos
-  const games = [];
-  const gameItems = document.querySelectorAll('.game-item');
-  
-  gameItems.forEach(item => {
-    const name = item.querySelector('.game-name-input').value.trim();
-    const hours = parseFloat(item.querySelector('.game-hours-input').value) || 0;
-    
-    if (name && hours > 0) {
-      games.push({ name, hours });
-    }
-  });
-  
-  if (games.length === 0) {
-    alert('Por favor, adicione pelo menos um jogo com horas jogadas!');
-    return;
-  }
-  
-  // Calcular estatísticas
-  const totalHours = games.reduce((sum, game) => sum + game.hours, 0);
-  const totalDays = Math.floor(totalHours / 24);
-  const yearsPlaying = parseInt(accountAge);
-  const daysTotal = yearsPlaying * 365;
-  const avgPerDay = (totalHours / daysTotal).toFixed(1);
-  
-  // Determinar nível de dedicação
-  let dedication = '';
-  if (totalHours < 100) dedication = '🌱 Iniciante';
-  else if (totalHours < 500) dedication = '⭐ Casual';
-  else if (totalHours < 1000) dedication = '🔥 Dedicado';
-  else if (totalHours < 3000) dedication = '💎 Veterano';
-  else dedication = '👑 Lendário';
-  
-  // Atualizar UI
-  document.getElementById('resultUsername').textContent = username;
-  document.getElementById('totalHours').textContent = totalHours.toLocaleString() + 'h';
-  document.getElementById('totalDays').textContent = totalDays.toLocaleString();
-  document.getElementById('avgPerDay').textContent = avgPerDay + 'h';
-  document.getElementById('gamesPlayed').textContent = games.length;
-  document.getElementById('dedication').textContent = dedication;
-  
-  // Criar gráfico de distribuição
-  games.sort((a, b) => b.hours - a.hours);
-  const maxHours = games[0].hours;
-  
-  const breakdownHTML = games.map(game => {
-    const percentage = (game.hours / totalHours * 100).toFixed(1);
-    const width = (game.hours / maxHours * 100);
-    
-    return `
-      <div class="game-bar">
-        <div class="game-bar-header">
-          <span class="game-name">${game.name}</span>
-          <span class="game-hours">${game.hours}h (${percentage}%)</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: ${width}%">${percentage}%</div>
-        </div>
-      </div>
-    `;
-  }).join('');
-  
-  document.getElementById('gamesBreakdown').innerHTML = breakdownHTML;
-  
-  // Mostrar resultados
-  document.getElementById('results').classList.add('show');
-  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
 }
 </script>
 
