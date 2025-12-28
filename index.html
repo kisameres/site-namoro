@@ -1,25 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Clock, Gamepad2, TrendingUp, Calendar, Play, Pause } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Clock,
+  Gamepad2,
+  TrendingUp,
+  Calendar,
+  Play,
+  Pause,
+  Trophy
+} from "lucide-react";
 
 export default function RobloxTracker() {
   const [sessions, setSessions] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSession, setCurrentSession] = useState(null);
-  const [gameName, setGameName] = useState('');
+  const [gameName, setGameName] = useState("");
 
+  /* =======================
+     LOAD / SAVE LOCALSTORAGE
+  ======================== */
   useEffect(() => {
-    const saved = localStorage.getItem('robloxSessions');
-    if (saved) {
-      setSessions(JSON.parse(saved));
-    }
+    const saved = localStorage.getItem("robloxSessions");
+    if (saved) setSessions(JSON.parse(saved));
   }, []);
 
   useEffect(() => {
-    if (sessions.length > 0) {
-      localStorage.setItem('robloxSessions', JSON.stringify(sessions));
-    }
+    localStorage.setItem("robloxSessions", JSON.stringify(sessions));
   }, [sessions]);
 
+  /* =======================
+     TIMER DA SESSÃO
+  ======================== */
   useEffect(() => {
     let interval;
     if (isPlaying && currentSession) {
@@ -33,171 +43,185 @@ export default function RobloxTracker() {
     return () => clearInterval(interval);
   }, [isPlaying, currentSession]);
 
+  /* =======================
+     AUTO-PAUSE AO SAIR DA ABA
+  ======================== */
+  useEffect(() => {
+    const onHide = () => {
+      if (document.hidden && isPlaying) stopSession();
+    };
+    document.addEventListener("visibilitychange", onHide);
+    return () =>
+      document.removeEventListener("visibilitychange", onHide);
+  }, [isPlaying]);
+
+  /* =======================
+     CONTROLES
+  ======================== */
   const startSession = () => {
     if (!gameName.trim()) return;
-    
-    const newSession = {
+    setCurrentSession({
       id: Date.now(),
-      game: gameName,
+      game: gameName.trim(),
       startTime: Date.now(),
       duration: 0,
-      date: new Date().toLocaleDateString('pt-BR')
-    };
-    
-    setCurrentSession(newSession);
+      date: new Date().toLocaleDateString("pt-BR")
+    });
     setIsPlaying(true);
   };
 
   const stopSession = () => {
-    if (currentSession) {
-      setSessions([currentSession, ...sessions]);
-      setCurrentSession(null);
-      setIsPlaying(false);
-      setGameName('');
-    }
+    if (!currentSession) return;
+    setSessions([currentSession, ...sessions]);
+    setCurrentSession(null);
+    setIsPlaying(false);
+    setGameName("");
   };
 
-  const formatTime = (ms) => {
-    const seconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    
-    return `${hours}h ${minutes % 60}m ${seconds % 60}s`;
+  /* =======================
+     UTILIDADES
+  ======================== */
+  const formatTime = ms => {
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    const h = Math.floor(m / 60);
+    return `${h}h ${m % 60}m ${s % 60}s`;
   };
 
-  const getTotalHours = () => {
-    const total = sessions.reduce((acc, session) => acc + session.duration, 0);
-    return (total / (1000 * 60 * 60)).toFixed(1);
-  };
+  const totalHours = (
+    sessions.reduce((a, s) => a + s.duration, 0) /
+    (1000 * 60 * 60)
+  ).toFixed(1);
 
-  const getLast2Weeks = () => {
-    const total = sessions
+  const last2Weeks = (
+    sessions
       .filter(s => {
-        const sessionDate = new Date(s.date.split('/').reverse().join('-'));
-        const twoWeeksAgo = new Date();
-        twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
-        return sessionDate >= twoWeeksAgo;
+        const d = new Date(s.date.split("/").reverse().join("-"));
+        const limit = new Date();
+        limit.setDate(limit.getDate() - 14);
+        return d >= limit;
       })
-      .reduce((acc, session) => acc + session.duration, 0);
-    return (total / (1000 * 60 * 60)).toFixed(1);
+      .reduce((a, s) => a + s.duration, 0) /
+    (1000 * 60 * 60)
+  ).toFixed(1);
+
+  const hoursByGame = () => {
+    const map = {};
+    sessions.forEach(s => {
+      map[s.game] = (map[s.game] || 0) + s.duration;
+    });
+    return Object.entries(map)
+      .map(([game, d]) => ({
+        game,
+        hours: (d / (1000 * 60 * 60)).toFixed(1)
+      }))
+      .sort((a, b) => b.hours - a.hours);
   };
 
+  /* =======================
+     UI
+  ======================== */
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8 text-white">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
+
+        {/* HEADER */}
+        <div className="text-center mb-10">
+          <div className="flex justify-center items-center gap-3 mb-4">
             <Gamepad2 className="w-12 h-12 text-purple-400" />
-            <h1 className="text-5xl font-bold text-white">Roblox Tracker</h1>
+            <h1 className="text-5xl font-bold">Roblox Tracker</h1>
           </div>
-          <p className="text-purple-200">Rastreie suas horas de jogo como na Steam</p>
+          <p className="text-purple-300">
+            Controle suas horas como na Steam
+          </p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <div className="flex items-center gap-3 mb-2">
-              <Clock className="w-6 h-6 text-blue-400" />
-              <h3 className="text-white font-semibold">Total de Horas</h3>
-            </div>
-            <p className="text-4xl font-bold text-blue-400">{getTotalHours()}h</p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <div className="flex items-center gap-3 mb-2">
-              <TrendingUp className="w-6 h-6 text-green-400" />
-              <h3 className="text-white font-semibold">Últimas 2 Semanas</h3>
-            </div>
-            <p className="text-4xl font-bold text-green-400">{getLast2Weeks()}h</p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-            <div className="flex items-center gap-3 mb-2">
-              <Calendar className="w-6 h-6 text-purple-400" />
-              <h3 className="text-white font-semibold">Sessões</h3>
-            </div>
-            <p className="text-4xl font-bold text-purple-400">{sessions.length}</p>
-          </div>
+        {/* STATS */}
+        <div className="grid md:grid-cols-3 gap-6 mb-10">
+          <Stat icon={<Clock />} title="Total" value={`${totalHours}h`} />
+          <Stat icon={<TrendingUp />} title="Últimas 2 semanas" value={`${last2Weeks}h`} />
+          <Stat icon={<Calendar />} title="Sessões" value={sessions.length} />
         </div>
 
-        {/* Session Control */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Nova Sessão</h2>
-          
+        {/* CONTROLE */}
+        <Card title="Nova Sessão">
           {!isPlaying ? (
             <div className="flex gap-4">
               <input
-                type="text"
                 value={gameName}
-                onChange={(e) => setGameName(e.target.value)}
-                placeholder="Nome do jogo (ex: Brookhaven, Adopt Me...)"
-                className="flex-1 px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-purple-400"
+                onChange={e => setGameName(e.target.value)}
+                placeholder="Nome do jogo"
+                className="flex-1 p-3 rounded bg-white/5 border border-white/20"
               />
               <button
                 onClick={startSession}
-                disabled={!gameName.trim()}
-                className="px-6 py-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white rounded-lg font-semibold flex items-center gap-2 transition"
+                className="bg-green-500 px-6 rounded flex gap-2 items-center"
               >
-                <Play className="w-5 h-5" />
-                Iniciar
+                <Play /> Iniciar
               </button>
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white/70 text-sm mb-1">Jogando agora:</p>
-                  <p className="text-2xl font-bold text-white">{currentSession?.game}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-white/70 text-sm mb-1">Tempo:</p>
-                  <p className="text-3xl font-bold text-green-400">
-                    {formatTime(currentSession?.duration || 0)}
-                  </p>
-                </div>
+              <div className="flex justify-between">
+                <strong>{currentSession.game}</strong>
+                <span className="text-green-400 text-xl">
+                  {formatTime(currentSession.duration)}
+                </span>
               </div>
               <button
                 onClick={stopSession}
-                className="w-full px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold flex items-center justify-center gap-2 transition"
+                className="w-full bg-red-500 p-3 rounded flex justify-center gap-2"
               >
-                <Pause className="w-5 h-5" />
-                Parar Sessão
+                <Pause /> Parar
               </button>
             </div>
           )}
-        </div>
+        </Card>
 
-        {/* Sessions History */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h2 className="text-2xl font-bold text-white mb-4">Histórico de Sessões</h2>
-          
-          {sessions.length === 0 ? (
-            <p className="text-white/50 text-center py-8">Nenhuma sessão registrada ainda</p>
-          ) : (
-            <div className="space-y-3 max-h-96 overflow-y-auto">
-              {sessions.map((session) => (
-                <div
-                  key={session.id}
-                  className="bg-white/5 rounded-lg p-4 border border-white/10 hover:bg-white/10 transition"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-white font-semibold text-lg">{session.game}</p>
-                      <p className="text-white/60 text-sm">{session.date}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-purple-400 font-bold text-xl">
-                        {formatTime(session.duration)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+        {/* RANKING */}
+        <Card title="🏆 Jogos Mais Jogados">
+          {hoursByGame().map((g, i) => (
+            <div key={g.game} className="flex justify-between border-b border-white/10 py-2">
+              <span>{i + 1}. {g.game}</span>
+              <span className="text-purple-400">{g.hours}h</span>
             </div>
+          ))}
+        </Card>
+
+        {/* HISTÓRICO */}
+        <Card title="Histórico de Sessões">
+          {sessions.length === 0 ? (
+            <p className="opacity-50 text-center">Nenhuma sessão</p>
+          ) : (
+            sessions.map(s => (
+              <div key={s.id} className="border-b border-white/10 py-2">
+                <strong>{s.game}</strong>
+                <div className="text-sm opacity-70">{s.date}</div>
+                <div className="text-purple-400">{formatTime(s.duration)}</div>
+              </div>
+            ))
           )}
-        </div>
+        </Card>
+
       </div>
     </div>
   );
 }
+
+/* COMPONENTES AUX */
+const Card = ({ title, children }) => (
+  <div className="bg-white/10 backdrop-blur rounded-xl p-6 border border-white/20 mb-8">
+    <h2 className="text-2xl font-bold mb-4">{title}</h2>
+    {children}
+  </div>
+);
+
+const Stat = ({ icon, title, value }) => (
+  <div className="bg-white/10 backdrop-blur rounded-xl p-6 border border-white/20">
+    <div className="flex gap-2 items-center mb-2">
+      {icon}
+      <span>{title}</span>
+    </div>
+    <div className="text-4xl font-bold text-purple-400">{value}</div>
+  </div>
+);
